@@ -1,0 +1,22 @@
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-light
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-humi
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-led
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-temp
+
++) đèn (led), quạt (fan): 0 (tắt) | 1 (bật)
++) cửa (door): 
+    mở: 0
+    đóng: 90
++) cảm biến:
++) inf: 0 | 1
+
+id: int
+value: int
+
++) nhiệt độ (temp): float
++) độ ẩm (humi): int
+
++) khí gas (gas): > 700 
++) cảm biến hồng ngoại (inf): 1 -> cảnh báo
+
++) key: aio_FuQE07rCHZRmaV3wdlYKHX5pVnSD
