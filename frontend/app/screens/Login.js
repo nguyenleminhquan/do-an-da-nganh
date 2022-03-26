@@ -2,7 +2,8 @@ import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity } from 'rea
 import React, {useState} from 'react';
 import { EvilIcons, AntDesign, Feather } from '@expo/vector-icons';
 import color from '../misc/color';
-
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/authenRedux/authenActions';
 
 const Login = () => {
   const [data, setData] = useState({
@@ -10,6 +11,8 @@ const Login = () => {
     password: '',
     secureTextEntry: true
   });
+  const dispatch = useDispatch()
+
   const updateSecureTextEntry = () => {
     setData({
         ...data,
@@ -29,6 +32,17 @@ const Login = () => {
       password: val.trim()
     });
   }
+
+  const handleLogin = () => {
+    const data = {
+      username: data.username,
+      password: data.password
+    }
+    // dispatch(login(data))  
+
+  }
+
+
   return (
     <View style={styles.container}>
         <Text style = {styles.appName}>SMART HOME</Text>
@@ -36,32 +50,29 @@ const Login = () => {
         <View style = {styles.textbox}>
             <EvilIcons name="user" size={35} color={color.MAIN}/>
             <TextInput
-            style={styles.input}
-            placeholder="Your username"
-            onChangeText={(val) => handleUsernameChange(val)}
+              style={styles.input}
+              placeholder="Your username"
+              onChangeText={(val) => handleUsernameChange(val)}
             />
         </View>
         <Text style={styles.textstyle}>Password:</Text>
         <View style = {styles.textbox}>
             <AntDesign name="lock" size={28} color={color.MAIN} />
             <TextInput
-            caretHidden = {true}
-            style={styles.input}
-            onChangeText={(val) => handlePasswordChange(val)}
-            secureTextEntry={data.secureTextEntry}
-            placeholder="Your password"
+              caretHidden = {true}
+              style={styles.input}
+              onChangeText={(val) => handlePasswordChange(val)}
+              secureTextEntry={data.secureTextEntry}
+              placeholder="Your password"
             />
-            <TouchableOpacity
-                onPress={updateSecureTextEntry}
-            >
-                {data.secureTextEntry ? 
-                <Feather name="eye-off" color="grey" size={20}/>
-                :
-                <Feather name="eye" color="grey" size={20}/>
-                }
+            <TouchableOpacity onPress={updateSecureTextEntry}>
+              {data.secureTextEntry ? 
+              <Feather name="eye-off" color="grey" size={20}/> :
+              <Feather name="eye" color="grey" size={20}/>
+              }
             </TouchableOpacity>
         </View>
-        <Button title='Login' color = {color.MAIN} />
+        <Button title='Login' color = {color.MAIN} onPress={handleLogin}/>
         <Text style = {styles.botomText}>Don't have an account? </Text>
         <Text style = {styles.signup}>Sign up here!</Text>
     </View>

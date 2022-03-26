@@ -1,18 +1,21 @@
 //import { StatusBar } from 'expo-status-bar';
+import { Provider } from 'react-redux';
+import store from './app/redux/store';
 import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-//import LogScreen from './app/screens/LogScreen';
-//import Login from './app/screens/Login';
-//import MessageScreen from './app/screens/MessageScreen';
-//import HomeScreen from './app/screens/HomeScreen';
+import LogScreen from './app/screens/LogScreen';
+import Login from './app/screens/Login';
+import MessageScreen from './app/screens/MessageScreen';
+import HomeScreen from './app/screens/HomeScreen';
 import DevicesTag from './app/components/DevicesTag';
 
 export default function App() {
   return (
-  <View style={styles.temp}>
-    <DevicesTag iconName="fan" name='Fans'/>
-  </View>
-
+  <Provider store={store}>
+    <View style={styles.temp}>
+      <Login />
+    </View>
+  </Provider>
   );
 }
 
