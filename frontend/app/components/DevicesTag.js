@@ -1,23 +1,27 @@
 import { Text, View,TouchableOpacity, StyleSheet } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import color from '../misc/color';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const DevicesTag = (props) => {
-  return (
-    <View style={styles.container}>
-    <View style={styles.logo}>
-        <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
-        <Text style={styles.deviceName}>{props.name}</Text>
-    </View>
-    <Text style={styles.activeText}>Active 1/1</Text>
-    <TouchableOpacity >
-        <View style={styles.detailBtn}>
-        <Text style={styles.detailText}>Detail</Text>
+    const [active, setActive] = useState(props.status.filter(value => value))
+    // useEffect(() => {
+
+    // }, deviceStatus)
+    return (
+        <View style={styles.container}>
+        <View style={styles.logo}>
+            <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
+            <Text style={styles.deviceName}>{props.name}</Text>
         </View>
-    </TouchableOpacity>
-    </View>
-  )
+        <Text style={styles.activeText}>Active {active.length}/{props.status.length}</Text>
+        <TouchableOpacity >
+            <View style={styles.detailBtn}>
+            <Text style={styles.detailText}>Detail</Text>
+            </View> 
+        </TouchableOpacity>
+        </View>
+    )
 }
 
 export default DevicesTag
