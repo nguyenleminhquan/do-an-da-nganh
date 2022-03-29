@@ -1,4 +1,4 @@
-Run App:
+<strong>Run App:</strong>
 <br />
 npm install
 <br />
