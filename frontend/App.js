@@ -1,4 +1,5 @@
 //import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider } from 'react-redux';
 import store from './app/redux/store';
 import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native';

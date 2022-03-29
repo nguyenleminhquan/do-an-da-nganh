@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import color from '../misc/color';
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import DevicesTag from '../components/DevicesTag';
 import { useSelector } from 'react-redux';
+import authenReducer from '../redux/authenRedux/authenReducer';
 
 const HomeScreen = () => {
     const devices = useSelector(state => state.device.devices)
@@ -30,26 +31,6 @@ const HomeScreen = () => {
     const [greet, setgreet] = useState('');
     const [iconGreet, setIconGreet] =useState('');
     const [greetColor, setGreetColor] = useState('');
-
-    // Demo for device
-    // const [devices, setDevices] = useState([
-    //     {
-    //         name: 'Fans',
-    //         iconName: 'fan',
-    //         isOn: [false, true]
-    //         // isOn: false
-    //     },
-    //     {
-    //         name: 'Doors',
-    //         iconName: 'door-open',
-    //         isOn: [false, true]
-    //     },
-    //     {
-    //         name: 'Lights',
-    //         iconName: 'lightbulb',
-    //         isOn: [false, true]
-    //     }
-    // ])
 
     const findGreet = () =>{
         const hrs = new Date().getHours();
@@ -98,22 +79,40 @@ const HomeScreen = () => {
                     <Ionicons name={iconGreet} size={24} color={greetColor} />
                 </View>
             </View>
+            <View>
+                <FlatList 
+                    data={[
+                        {key: 'Living Room'},
+                        {key: 'Bed Room'},
+                        {key: 'Bath Room'},
+                        {key: 'Kitchen'}
+                    ]}
+                    style={styles.navigationBar}
+                    renderItem={({item}) => <Text style={styles.navigationItem}>{item.key}</Text>}
+                />
+            </View>
         </View>
         <View style={styles.bottomView}>
             <Text style={styles.bottomViewStatus}>
                 {devices.length} devices in the living room are 
-                <Text style={styles.deviceStatus}>working normally</Text>
+                <Text style={styles.deviceStatus}> working normally</Text>
             </Text>
             <View style={styles.deviceLists}>
                 {devices.map((device, index) => (
-                    <DevicesTag 
-                        key={index}
-                        name={device.name} 
-                        iconName={device.iconName} 
-                        status={device.isOn}
-                    />)
-                )}
+                    <View style={styles.deviceItem} key={index}>
+                        <DevicesTag 
+                            name={device.name} 
+                            iconName={device.iconName} 
+                            status={device.isOn}
+                        />
+                    </View>
+                ))}
             </View>
+        </View>
+        <View style={styles.footer}>
+            <FontAwesome5 name="home" size={35} color="white" />
+            <Ionicons name="notifications" size={35} color="white" />
+            <FontAwesome5 name="history" size={35} color="white" />
         </View>
     </View>   
   )
@@ -129,14 +128,14 @@ const styles = StyleSheet.create({
         backgroundColor: color.MAIN
     },
     bottomView:{
-        flex: 8,
+        flex: 12,
         backgroundColor: color.BLANK,
         borderTopRightRadius: 30,
-        borderTopLeftRadius: 30 
+        borderTopLeftRadius: 30,
     },
     logout:{
         flexDirection: "row",
-        justifyContent:'right',
+        justifyContent:'flex-end',
         marginTop:5,
         marginRight: 15
     },
@@ -146,17 +145,19 @@ const styles = StyleSheet.create({
     },
     containerLogout:{
         width: '100%',
-        textAlign: 'right'
+        textAlign: 'right',
+        marginTop: 50,
+        // marginBottom: 20,
     },
     header:{
-        height: '55%',
+        // height: '55%',
         flexDirection: 'row'
     },
     greeting:{
         flex:1,
         flexDirection:'row',
         alignSelf:'center',
-        justifyContent:'right',
+        justifyContent:'flex-end',
         marginRight: 20
     },
     appName:{
@@ -181,8 +182,33 @@ const styles = StyleSheet.create({
         fontSize:18,
         marginRight:4
     },
+    bottomViewStatus: {
+        fontSize: 22,
+        color: color.PURPLE,
+        marginHorizontal: 40,
+        marginVertical: 20,
+        // flex: 1,
+    },
+    deviceStatus: {
+        fontWeight: 'bold'
+    },
     deviceLists: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+    },
+    deviceItem: {
+        margin: 12,
+    },
+    footer: {
+        flexDirection: 'row',
+        fontSize: 30,
+        justifyContent: 'space-around',
+        paddingVertical: 15
+    },
+    navigationBar: {
         flexDirection: 'row'
     }
 });
+
 export default HomeScreen

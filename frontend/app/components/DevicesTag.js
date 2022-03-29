@@ -17,7 +17,7 @@ const DevicesTag = (props) => {
         <Text style={styles.activeText}>Active {active.length}/{props.status.length}</Text>
         <TouchableOpacity >
             <View style={styles.detailBtn}>
-            <Text style={styles.detailText}>Detail</Text>
+                <Text style={styles.detailText}>Detail</Text>
             </View> 
         </TouchableOpacity>
         </View>
