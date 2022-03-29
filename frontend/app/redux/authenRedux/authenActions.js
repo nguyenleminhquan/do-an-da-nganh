@@ -6,7 +6,10 @@ export const login = payload => {
         axios.post('http://localhost:5000/user/login', payload)
             .then(response => {
                 const user = response.data
+
+                localStorage.setItem('user', JSON.stringify(user))
                 dispatch(loginSuccess(user))
+                console.log('Login Successfully!!!')
             })
             .catch(error => {
                 const errorMsg = error.message
