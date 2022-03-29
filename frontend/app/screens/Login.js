@@ -34,11 +34,11 @@ const Login = () => {
   }
 
   const handleLogin = () => {
-    const data = {
+    const user = {
       username: data.username,
       password: data.password
     }
-    // dispatch(login(data))  
+    dispatch(login(user))  
 
   }
 

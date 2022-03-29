@@ -13,7 +13,7 @@ export default function App() {
   return (
   <Provider store={store}>
     <View style={styles.temp}>
-      <Login />
+      <HomeScreen />
     </View>
   </Provider>
   );

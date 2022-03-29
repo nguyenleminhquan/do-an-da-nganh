@@ -2,8 +2,14 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import color from '../misc/color';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import DevicesTag from '../components/DevicesTag';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
+    const devices = useSelector(state => state.device.devices)
+
+    console.log(devices)
+
     const handleLogoutBtn = () => {
         Alert.alert(
         'Do you want to logout?',
@@ -24,6 +30,27 @@ const HomeScreen = () => {
     const [greet, setgreet] = useState('');
     const [iconGreet, setIconGreet] =useState('');
     const [greetColor, setGreetColor] = useState('');
+
+    // Demo for device
+    // const [devices, setDevices] = useState([
+    //     {
+    //         name: 'Fans',
+    //         iconName: 'fan',
+    //         isOn: [false, true]
+    //         // isOn: false
+    //     },
+    //     {
+    //         name: 'Doors',
+    //         iconName: 'door-open',
+    //         isOn: [false, true]
+    //     },
+    //     {
+    //         name: 'Lights',
+    //         iconName: 'lightbulb',
+    //         isOn: [false, true]
+    //     }
+    // ])
+
     const findGreet = () =>{
         const hrs = new Date().getHours();
         if(hrs === 0 || hrs <12) {
@@ -73,7 +100,20 @@ const HomeScreen = () => {
             </View>
         </View>
         <View style={styles.bottomView}>
-            
+            <Text style={styles.bottomViewStatus}>
+                {devices.length} devices in the living room are 
+                <Text style={styles.deviceStatus}>working normally</Text>
+            </Text>
+            <View style={styles.deviceLists}>
+                {devices.map((device, index) => (
+                    <DevicesTag 
+                        key={index}
+                        name={device.name} 
+                        iconName={device.iconName} 
+                        status={device.isOn}
+                    />)
+                )}
+            </View>
         </View>
     </View>   
   )
@@ -140,6 +180,9 @@ const styles = StyleSheet.create({
         color:color.BRIGHTTEXT,
         fontSize:18,
         marginRight:4
+    },
+    deviceLists: {
+        flexDirection: 'row'
     }
 });
 export default HomeScreen
