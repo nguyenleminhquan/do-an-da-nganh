@@ -1,15 +1,30 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import color from '../misc/color';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    Alert,
+    ScrollView 
+} from 'react-native';
 import { MaterialIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import React, {useState, useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveRoom } from '../redux/roomRedux/roomActions'
+import color from '../misc/color';
 import DevicesTag from '../components/DevicesTag';
-import { useSelector } from 'react-redux';
-import authenReducer from '../redux/authenRedux/authenReducer';
+import NavigationBar from '../components/NavigationBar';
+import RoomLists from '../components/RoomLists';
 
 const HomeScreen = () => {
     const devices = useSelector(state => state.device.devices)
-
-    console.log(devices)
+    const rooms = useSelector(state => state.room.rooms)
+    const activeRoom = useSelector(state => state.room.activeRoom)
+    const dispatch = useDispatch()
+    
+    const [greet, setgreet] = useState('');
+    const [iconGreet, setIconGreet] =useState('');
+    const [greetColor, setGreetColor] = useState('');
+    // console.log(devices)
 
     const handleLogoutBtn = () => {
         Alert.alert(
@@ -27,10 +42,6 @@ const HomeScreen = () => {
           cancelable: true
         })
     }
-
-    const [greet, setgreet] = useState('');
-    const [iconGreet, setIconGreet] =useState('');
-    const [greetColor, setGreetColor] = useState('');
 
     const findGreet = () =>{
         const hrs = new Date().getHours();
@@ -50,72 +61,72 @@ const HomeScreen = () => {
             return setgreet('Evening');
         }
     };
+
     useEffect(()=> {
         findGreet();
     }, []);
 
-  return (
-    <View style={styles.container}>
-        <View style={styles.topView}>
-            <View style={styles.containerLogout}>
-                <TouchableOpacity style={styles.logout} onPress={handleLogoutBtn}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                    <MaterialIcons name="logout" size={20} color={color.BRIGHTTEXT} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.header}>
-                <View style={styles.appName}>
-                    <Text style={styles.s}>
-                        S
-                    </Text>
-                    <Text style={styles.mart}>
-                        mart
-                    </Text>
+    return (
+        <View style={styles.container}>
+            <View style={styles.topView}>
+                <View style={styles.containerLogout}>
+                    <TouchableOpacity style={styles.logout} onPress={handleLogoutBtn}>
+                        <Text style={styles.logoutText}>Logout</Text>
+                        <MaterialIcons name="logout" size={20} color={color.BRIGHTTEXT} />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.greeting}>
-                    <Text style={styles.greetingText}>
-                        {`Good ${greet}!`}
-                    </Text>
-                    <Ionicons name={iconGreet} size={24} color={greetColor} />
-                </View>
-            </View>
-            <View>
-                <FlatList 
-                    data={[
-                        {key: 'Living Room'},
-                        {key: 'Bed Room'},
-                        {key: 'Bath Room'},
-                        {key: 'Kitchen'}
-                    ]}
-                    style={styles.navigationBar}
-                    renderItem={({item}) => <Text style={styles.navigationItem}>{item.key}</Text>}
-                />
-            </View>
-        </View>
-        <View style={styles.bottomView}>
-            <Text style={styles.bottomViewStatus}>
-                {devices.length} devices in the living room are 
-                <Text style={styles.deviceStatus}> working normally</Text>
-            </Text>
-            <View style={styles.deviceLists}>
-                {devices.map((device, index) => (
-                    <View style={styles.deviceItem} key={index}>
-                        <DevicesTag 
-                            name={device.name} 
-                            iconName={device.iconName} 
-                            status={device.isOn}
-                        />
+                <View style={styles.header}>
+                    <View style={styles.appName}>
+                        <Text style={styles.s}>
+                            S
+                        </Text>
+                        <Text style={styles.mart}>
+                            mart
+                        </Text>
                     </View>
-                ))}
+                    <View style={styles.greeting}>
+                        <Text style={styles.greetingText}>
+                            {`Good ${greet}!`}
+                        </Text>
+                        <Ionicons name={iconGreet} size={24} color={greetColor} />
+                    </View>
+                </View>
+                {/* <View style={styles.navigationBar}>
+                    <ScrollView 
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {rooms.map(room => (
+                            <Text 
+                                key={room}
+                                style={[styles.navigationItem, activeRoom === room ? styles.roomActive : null ]}
+                                onPress={() => dispatch(setActiveRoom(room))}
+                            >{room}</Text>
+                        ))}
+                    </ScrollView>
+                </View> */}
+                <RoomLists />
             </View>
-        </View>
-        <View style={styles.footer}>
-            <FontAwesome5 name="home" size={35} color="white" />
-            <Ionicons name="notifications" size={35} color="white" />
-            <FontAwesome5 name="history" size={35} color="white" />
-        </View>
-    </View>   
-  )
+            <View style={styles.bottomView}>
+                <Text style={styles.bottomViewStatus}>
+                    {devices.length} devices in the living room are 
+                    <Text style={styles.deviceStatus}> working normally</Text>
+                </Text>
+                <View style={styles.deviceLists}>
+                    {devices.map((device, index) => (
+                        <View style={styles.deviceItem} key={index}>
+                            <DevicesTag 
+                                name={device.name} 
+                                iconName={device.iconName} 
+                                status={device.isOn}
+                            />
+                        </View>
+                    ))}
+                </View>
+            </View>
+            <NavigationBar />
+        </View>   
+    )
 }
 
 const styles = StyleSheet.create({
@@ -124,7 +135,7 @@ const styles = StyleSheet.create({
         backgroundColor:color.MAIN
     },
     topView:{
-        flex: 3,
+        // flex: 4,
         backgroundColor: color.MAIN
     },
     bottomView:{
@@ -200,14 +211,21 @@ const styles = StyleSheet.create({
     deviceItem: {
         margin: 12,
     },
-    footer: {
-        flexDirection: 'row',
-        fontSize: 30,
-        justifyContent: 'space-around',
-        paddingVertical: 15
-    },
     navigationBar: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginVertical: 12,
+    },
+    navigationItem: {
+        fontSize: 20,   
+        paddingHorizontal: 20,
+        color: color.BRIGHTTEXT,
+        paddingVertical: 6
+    },
+    roomActive: {
+        backgroundColor: '#ffb600',
+        borderRadius: 22,
+        color: color.DARK,
+        fontWeight: 'bold'
     }
 });
 

@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import color from '../misc/color';
 import { MaterialIcons } from '@expo/vector-icons';
+import NavigationBar from '../components/NavigationBar';
 
 const MessageScreen = () => {
     const handleLogoutBtn = () => {
@@ -20,28 +21,30 @@ const MessageScreen = () => {
           cancelable: true
         })
     }
-  return (
-    <View style={styles.container}>
-        <View style={styles.titleView}>
-            <View style={styles.containerTitle}>
-                <Text style={styles.tilteText}>Message</Text>
+    return (
+        <View style={styles.container}>
+            <View style={styles.titleView}>
+                <View style={styles.containerTitle}>
+                    <Text style={styles.tilteText}>Message</Text>
+                </View>
+                <View style={styles.containerLogout}>
+                    <TouchableOpacity style={styles.logout} onPress={handleLogoutBtn}>
+                        <Text style={styles.logoutText}>Logout</Text>
+                        <MaterialIcons name="logout" size={20} color={color.BRIGHTTEXT} />
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View style={styles.containerLogout}>
-                <TouchableOpacity style={styles.logout} onPress={handleLogoutBtn}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                    <MaterialIcons name="logout" size={20} color={color.BRIGHTTEXT} />
-                </TouchableOpacity>
-            </View>
+            <NavigationBar />
         </View>
-    </View>
-  )
-}
+    )
+}   
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: color.BLANK,
         alignItems: 'center',
+        justifyContent: 'space-between'
     },
     tilteText:{
         color: color.BRIGHTTEXT,

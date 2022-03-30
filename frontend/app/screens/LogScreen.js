@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import React from 'react';
-import color from '../misc/color';
 import { MaterialIcons } from '@expo/vector-icons';
+import color from '../misc/color';
+import NavigationBar from '../components/NavigationBar';
 
 const Btns = [
     {
@@ -69,6 +70,7 @@ const logScreen = () => {
                 keyExtractor={item => item.id}
             />
         </View>
+        <NavigationBar />
     </View>
   )
 }
@@ -78,7 +80,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: color.BLANK,
-        //alignItems: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     tilteText:{
         color: color.BRIGHTTEXT,

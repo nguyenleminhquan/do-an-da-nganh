@@ -10,16 +10,16 @@ const DevicesTag = (props) => {
     // }, deviceStatus)
     return (
         <View style={styles.container}>
-        <View style={styles.logo}>
-            <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
-            <Text style={styles.deviceName}>{props.name}</Text>
-        </View>
-        <Text style={styles.activeText}>Active {active.length}/{props.status.length}</Text>
-        <TouchableOpacity >
-            <View style={styles.detailBtn}>
-                <Text style={styles.detailText}>Detail</Text>
-            </View> 
-        </TouchableOpacity>
+            <View style={styles.logo}>
+                <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
+                <Text style={styles.deviceName}>{props.name}</Text>
+            </View>
+            <Text style={styles.activeText}>Active {active.length}/{props.status.length}</Text>
+            <TouchableOpacity >
+                <View style={styles.detailBtn}>
+                    <Text style={styles.detailText}>Detail</Text>
+                </View> 
+            </TouchableOpacity>
         </View>
     )
 }

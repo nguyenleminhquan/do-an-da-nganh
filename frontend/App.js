@@ -1,22 +1,30 @@
-//import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Provider } from 'react-redux';
 import store from './app/redux/store';
-import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { StyleSheet, View } from 'react-native';
+import { NativeRouter, Route, Link, Routes } from "react-router-native";
 import LogScreen from './app/screens/LogScreen';
 import Login from './app/screens/Login';
 import MessageScreen from './app/screens/MessageScreen';
 import HomeScreen from './app/screens/HomeScreen';
-import DevicesTag from './app/components/DevicesTag';
+import DeviceDetail from "./app/screens/DeviceDetail";
 
 export default function App() {
+  // const activeRoom = useSelector(state => state.room.activeRoom)
+
   return (
-  <Provider store={store}>
-    <View style={styles.temp}>
-      <HomeScreen />
-    </View>
-  </Provider>
+    <NativeRouter>
+      <Provider store={store}>
+          {/* <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path='/notiScreen' element={<MessageScreen />} />
+            <Route path="/logScreen" element={<LogScreen />} />
+            <Route path='/deviceDetail' element={<DeviceDetail id='0' />} />
+          </Routes> */}
+          <DeviceDetail id='0' />
+     
+      </Provider>
+    </NativeRouter>
   );
 }
 
