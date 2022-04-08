@@ -2,7 +2,12 @@ import express from 'express'
 import mqtt from 'mqtt'
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
+import APINotFound from './middlewares/APINotFound.js'
+import errorHandler from './middlewares/errorHandler.js'
+
 import userRoutes from './routes/user.routes.js'
+import deviceRoutes from './routes/device.routes.js'
+
 
 connectDB()
 dotenv.config()
@@ -19,7 +24,6 @@ const client = mqtt.connect(connectUrl, {
     clean: true,
     connectTimeout: 4000,
     username: 'TSang2907',
-    password: 'aio_FuQE07rCHZRmaV3wdlYKHX5pVnSD',
     // reconnectPeriod: 1000,
 })
 
@@ -45,6 +49,9 @@ app.use('/user', userRoutes)
 app.get('/', (req, res, next) => {
     res.send('API is running!')
 })
+
+app.use(APINotFound)
+app.use(errorHandler)
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`)
