@@ -1,7 +1,12 @@
 https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-light
 https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-humi
-https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-led
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-gas
 https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-temp
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-led
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-fan
+https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-door
+
+
 
 +) đèn (led), quạt (fan): 0 (tắt) | 1 (bật)
 +) cửa (door): 
