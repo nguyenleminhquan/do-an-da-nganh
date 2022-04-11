@@ -47,8 +47,7 @@ const client = mqtt.connect(connectUrl, {
     clean: true,
     connectTimeout: 4000,
     username: 'TSang2907',
-    reconnectPeriod: 1000,
-    password: 'aio_yrDc79deqXpMCSR10xjfMLteoy7O'
+    reconnectPeriod: 1000
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
