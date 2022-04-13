@@ -3,10 +3,9 @@ import React, {useState} from 'react';
 import colors from '../misc/colors';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const Login = () => {
-
+const Register = () => {
     const navigation = useNavigation();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -14,11 +13,11 @@ const Login = () => {
     const updateSecureTextEntry = () => {
         setHide(!hide);
     }
-    const loginAction = () => {
+    const signUpAction = () => {
         navigation.navigate('Main');
     }
-    const navToSignUp = () => {
-        navigation.navigate('Register');
+    const navToLogin = () => {
+        navigation.navigate('Login');
     }
     const dismissKeyboard = () =>{
         Keyboard.dismiss();
@@ -57,21 +56,21 @@ const Login = () => {
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity
-                    style={styles.loginBtn}
-                    onPress={loginAction}
+                    style={styles.registerBtn}
+                    onPress={signUpAction}
                 >
-                    <Text style={styles.btnText}>LOGIN</Text>
+                    <Text style={styles.btnText}>SIGN UP</Text>
                 </TouchableOpacity>
-                <Text style={styles.bottomText}>Don't have an acount?</Text>
-                <TouchableOpacity onPress={navToSignUp}>
-                    <Text style={styles.registerText}>Register Now!</Text>
+                <Text style={styles.bottomText}>Already have an acount?</Text>
+                <TouchableOpacity onPress={navToLogin}>
+                    <Text style={styles.registerText}>Login here!</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </TouchableWithoutFeedback>
     );
 }
 
-export default Login;
+export default Register;
 
 const styles = StyleSheet.create({
     container:{
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
         width: 25,
         marginLeft: '10%'
     },
-    loginBtn:{
+    registerBtn:{
         width: '80%',
         height: 40,
         backgroundColor: colors.MAIN,
