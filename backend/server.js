@@ -47,11 +47,18 @@ const client = mqtt.connect(connectUrl, {
     clean: true,
     connectTimeout: 4000,
     username: 'TSang2907',
-    reconnectPeriod: 1000
+    reconnectPeriod: 1000,
+    password: "aio_iwrv41XWoKAOE1KOvMJNwD8uxQr6"
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
 const door = 'TSang2907/feeds/cnpm-door'
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
+})
 
 client.on('connect', () => {
     console.log('Connect Adafruit successfully!')
