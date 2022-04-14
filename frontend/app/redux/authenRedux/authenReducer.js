@@ -2,8 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { LOGIN_FAILURE, LOGIN_SUCCESS, REGISTER_FAILURE, REGISTER_SUCCESS } from "./authenType"
 
 const initState = {
-    isLogin: false,
-    // user: JSON.parse(window.localStorage.getItem('user')) && {}
+    loginSuccess: false,
+    errorMsg: '',
     user: AsyncStorage.getItem('user') ?? {} 
 }
 
@@ -12,16 +12,16 @@ const authenReducer = (state = initState, action) => {
         case LOGIN_SUCCESS:
             // Do something
             return {
-                ...state, 
-                isLogin: true,
+                ...state,
+                loginSuccess: true,
                 user: action.payload
             }
         case LOGIN_FAILURE:
             // Do something'
             return {
                 ...state, 
-                isLogin: true,
-                user: {}
+                loginSuccess: false,
+                errorMsg: action.payload
             }
         case REGISTER_SUCCESS:
             // Do something

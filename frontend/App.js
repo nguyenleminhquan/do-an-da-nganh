@@ -1,4 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
+import { Provider } from 'react-redux';
+import store from './app/redux/store'
 //import Login from './app/screens/Login';
 //import Register from './app/screens/Register';
 import { StyleSheet, Text, View } from 'react-native';
@@ -7,32 +9,34 @@ import Intro from './app/screens/Intro';
 import Main from './app/screens/Main';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Logs from './app/screens/Logs';
-import LogTag from './app/components/logTag';
-import Home from './app/screens/Home';
+// import Logs from './app/screens/Logs';
+// import LogTag from './app/components/logTag';
+// import Home from './app/screens/Home';
 // import LogoutBtn from './app/components/LogoutBtn';
 //import DeviceTag from './app/components/DeviceTag';
 
-//const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // return (
-  //   <SafeAreaProvider>
-  //     <NavigationContainer>
-  //       <Stack.Navigator>
-  //         <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}}/>
-  //         <Stack.Screen name="Main" component={Main} options={{headerShown:false}}/>
-  //       </Stack.Navigator>
-  //     </NavigationContainer>
-  //   </SafeAreaProvider>
-  // );
   return (
     <SafeAreaProvider>
-    <View style={styles.container}>
-      <Home/>
-    </View>
+      <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}}/>
+          <Stack.Screen name="Main" component={Main} options={{headerShown:false}}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+      </Provider>
     </SafeAreaProvider>
   );
+  // return (
+    // <SafeAreaProvider>
+    // <View style={styles.container}>
+    //   <Home/>
+    // </View>
+    // </SafeAreaProvider>
+  // );
 }
 
 const styles = StyleSheet.create({

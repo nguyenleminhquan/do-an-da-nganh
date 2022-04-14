@@ -1,35 +1,59 @@
-import { Text, View,TouchableOpacity, StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import color from '../misc/color';
+import { Text, View,TouchableOpacity, StyleSheet, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import colors from '../misc/colors';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 
-const DevicesTag = (props) => {
-    const [active, setActive] = useState(props.status.filter(value => value))
-    // useEffect(() => {
+const DeviceTag = (props) => {
+    const dispatch = useDispatch()
+    const device = useSelector(state => state.device.devices.find(device => device.name === props.name))
+    
+    const [status, setStatus] = useState(device.active)
 
-    // }, deviceStatus)
+    // const targetDevice = devices.find(device => device.name === props.name)  
+    const [btnName, setBtnName] = useState(() => {
+        if (device.name === 'Fan') {
+            return 'Adjust'
+        }
+        else {
+            if (status === '1') return 'Off'
+            else if (status === '0') return 'On'
+        }
+    })
+
+    const handleDeviceClick = () => {
+        
+
+    }
+    console.log('Nut nay la: ', btnName)
+    // Hien tai chi co 1 thiet bi o moi phong
     return (
-        <View style={styles.container}>
+        <Pressable style={styles.container}>
             <View style={styles.logo}>
                 <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
                 <Text style={styles.deviceName}>{props.name}</Text>
             </View>
-            <Text style={styles.activeText}>Active {active.length}/{props.status.length}</Text>
+            <Text style={styles.activeText}>Active {device.active}/1</Text>
             <TouchableOpacity >
                 <View style={styles.detailBtn}>
-                    <Text style={styles.detailText}>Detail</Text>
-                </View> 
+                {/* <Text style={styles.detailText}>Detail</Text> */}
+                <Text 
+                    style={styles.detailText}
+                    onPress={handleDeviceClick}
+                >{btnName}</Text>
+                </View>
             </TouchableOpacity>
-        </View>
-    )
+        </Pressable>
+    );
 }
 
-export default DevicesTag
+export default DeviceTag
 
 const styles = StyleSheet.create({
     container:{
-        width: 145,
-        height: 180,
+        width: 135,
+        height: 160,
         backgroundColor: '#fff',
         borderRadius: 16,
         alignItems:'center',
@@ -40,14 +64,14 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     activeText:{
-        fontSize: 26,
-        color: color.PURPLE,
+        fontSize: 22,
+        color: colors.HIGHLIGHTTEXT,
         marginBottom: 20
     },
     detailBtn:{
         width: 116,
         height: 42,
-        backgroundColor: color.BTNCOLOR,
+        backgroundColor: colors.HIGHLIGHT,
         borderRadius: 22,
         alignItems:'center',
         justifyContent:'center'
@@ -60,55 +84,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginLeft: 5,
-        color: color.PURPLE
-    }
-})
-
-
-
-// export class DevicesTag extends Component {
-//   render() {
-//     return (
-
-//     )
-//   }
-// }
-
-// styles = StyleSheet.create({
-//     container:{
-//         width: 145,
-//         height: 180,
-//         backgroundColor: '#fff',
-//         borderRadius: 16,
-//         alignItems:'center',
-//         justifyContent:'center'
-//     },
-//     logo:{
-//     flexDirection:'row',
-//     marginBottom: 20
-//     },
-//     activeText:{
-//     fontSize: 26,
-//     color: color.PURPLE,
-//     marginBottom: 20
-//     },
-//     detailBtn:{
-//     width: 116,
-//     height: 42,
-//     backgroundColor: color.BTNCOLOR,
-//     borderRadius: 22,
-//     alignItems:'center',
-//     justifyContent:'center'
-//     },
-//     detailText:{
-//     fontSize: 18,
-//     fontWeight: 'bold'
-//     },
-//     deviceName:{
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginLeft: 5,
-//     color: color.PURPLE
-//     }
-// });
-// export default DevicesTag;
+        color: colors.HIGHLIGHTTEXT
+    },
+});

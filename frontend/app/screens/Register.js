@@ -4,9 +4,13 @@ import colors from '../misc/colors';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
+import { register } from '../redux/authenRedux/authenActions';
 
 const Register = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+    const [fullname, setFullname] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [hide, setHide] = useState(true)
@@ -14,6 +18,8 @@ const Register = () => {
         setHide(!hide);
     }
     const signUpAction = () => {
+        const userInfo = { fullname, username, password }
+        dispatch(register(userInfo))
         navigation.navigate('Main');
     }
     const navToLogin = () => {
@@ -24,9 +30,18 @@ const Register = () => {
     }
 
     return (
-        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        // <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <SafeAreaView style={styles.container}>
                 <Text style={styles.nameText}>SMART HOME</Text>
+                <Text style={styles.labelText}>Fullname:</Text>
+                <View style={styles.inputbox}>
+                    <FontAwesome name="user" size={24} color={colors.MAIN}/>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text)=>{setFullname(text)}}
+                        placeholder='Enter your fullname'
+                    />
+                </View>
                 <Text style={styles.labelText}>Username:</Text>
                 <View style={styles.inputbox}>
                     <FontAwesome name="user" size={24} color={colors.MAIN}/>
@@ -66,7 +81,7 @@ const Register = () => {
                     <Text style={styles.registerText}>Login here!</Text>
                 </TouchableOpacity>
             </SafeAreaView>
-        </TouchableWithoutFeedback>
+        // </TouchableWithoutFeedback>
     );
 }
 

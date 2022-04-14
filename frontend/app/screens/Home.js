@@ -1,9 +1,12 @@
 import { View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import { useSelector } from 'react-redux';
 import colors from '../misc/colors';
 import {Ionicons } from '@expo/vector-icons';
 import LogoutBtn from '../components/LogoutBtn';
+import DevicesTag from '../components/DevicesTag';
 import RoomBtn from '../components/RoomBtn'
+
 
 const ROOM=[
   {
@@ -40,6 +43,8 @@ const Home = () => {
   const [greet, setgreet] = useState('');
   const [iconGreet, setIconGreet] =useState('');
   const [greetColor, setGreetColor] = useState('');
+  const devices = useSelector(state => state.device.devices)
+  
   const findGreet = () =>{
       const hrs = new Date().getHours();
       if(hrs === 0 || hrs <12) {
@@ -84,7 +89,23 @@ const Home = () => {
         </ScrollView>
       </View>
       <View style={styles.body}>
-
+        <View style={styles.bottomView}>
+            <Text style={styles.bottomViewStatus}>
+                {devices.length} devices in the living room are 
+                <Text style={styles.deviceStatus}> working normally</Text>
+            </Text>
+            <ScrollView contentContainerStyle={styles.deviceLists} >
+                {devices.map((device, index) => (
+                    <View style={styles.deviceItem} key={index}>
+                        <DevicesTag 
+                            name={device.name} 
+                            iconName={device.iconName} 
+                            // status={device.active}
+                        />
+                    </View>
+                ))}
+            </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -147,5 +168,24 @@ const styles = StyleSheet.create({
   rooms:{
     position: 'absolute',
     bottom: 5
-  }
+  },
+  bottomViewStatus: {
+    fontSize: 22,
+    color: colors.PURPLE,
+    // marginHorizontal: 5,
+    // marginVertical: 10,
+    // flex: 1,
+    margin: 10
+  },
+  deviceStatus: {
+      fontWeight: 'bold'
+  },
+  deviceLists: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  deviceItem: {
+    margin: 12,
+  },
 });

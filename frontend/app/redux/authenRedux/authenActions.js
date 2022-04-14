@@ -12,7 +12,9 @@ export const login = payload => {
                 console.log('Login Successfully!!!')
             })
             .catch(error => {
-                const errorMsg = error.message
+                const errorMsg = error.response.data.msg
+
+                console.log(errorMsg)
                 dispatch(loginFailure(errorMsg))
             })
     }
