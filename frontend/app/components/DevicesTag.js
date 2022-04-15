@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import colors from '../misc/colors';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
+import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 
 const DeviceTag = (props) => {
     const dispatch = useDispatch()
@@ -11,7 +11,6 @@ const DeviceTag = (props) => {
     
     const [status, setStatus] = useState(device.active)
 
-    // const targetDevice = devices.find(device => device.name === props.name)  
     const [btnName, setBtnName] = useState(() => {
         if (device.name === 'Fan') {
             return 'Adjust'
@@ -23,10 +22,30 @@ const DeviceTag = (props) => {
     })
 
     const handleDeviceClick = () => {
-        
-
+        console.log(btnName)
+        if (btnName === 'Off') {
+            if (device.name === 'Light') {
+                dispatch(toggleLed('1'))
+            }
+            else if (device.name === 'Door') {
+                dispatch(toggleDoor('1'))
+            }
+            setBtnName('On')
+            setStatus('0')
+        } else if (btnName === 'On') {
+            if (device.name === 'Light') {
+                dispatch(toggleLed('0'))
+            }
+            else if (device.name === 'Door') {
+                dispatch(toggleDoor('0'))
+            }
+            setBtnName('Off')
+            setStatus('1')
+        } else {
+            // Link to adjust fan modal
+        }
     }
-    console.log('Nut nay la: ', btnName)
+
     // Hien tai chi co 1 thiet bi o moi phong
     return (
         <Pressable style={styles.container}>
@@ -34,18 +53,14 @@ const DeviceTag = (props) => {
                 <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
                 <Text style={styles.deviceName}>{props.name}</Text>
             </View>
-            <Text style={styles.activeText}>Active {device.active}/1</Text>
-            <TouchableOpacity >
+            <Text style={styles.activeText}>Active {status}/1</Text>
+            <TouchableOpacity onPress={handleDeviceClick}>
                 <View style={styles.detailBtn}>
-                {/* <Text style={styles.detailText}>Detail</Text> */}
-                <Text 
-                    style={styles.detailText}
-                    onPress={handleDeviceClick}
-                >{btnName}</Text>
+                    <Text style={styles.detailText}>{btnName}</Text>
                 </View>
             </TouchableOpacity>
         </Pressable>
-    );
+    );  
 }
 
 export default DeviceTag
