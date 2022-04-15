@@ -19,8 +19,9 @@ const Login = () => {
         setHide(!hide);
     }
     const loginAction = () => {
-        const userInfo = {username, password}
-        dispatch(login(userInfo))
+        // const userInfo = {username, password}
+        // dispatch(login(userInfo))
+        navigation.navigate('Main')
     }
     const navToSignUp = () => {
         navigation.navigate('Register');
@@ -29,11 +30,11 @@ const Login = () => {
         Keyboard.dismiss();
     }
 
-    useEffect(() => {
-        if (loginSuccess) {
-            navigation.navigate('Main');
-        }
-    }, [loginSuccess])
+    // useEffect(() => {
+    //     if (loginSuccess) {
+    //         navigation.navigate('Main');
+    //     }
+    // }, [loginSuccess])
 
     return (
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>

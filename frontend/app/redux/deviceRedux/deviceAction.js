@@ -1,24 +1,17 @@
 import axios from 'axios'
 import { 
-    STATUS_LED,
-    STATUS_DOOR,
-    STATUS_FAN,
     SET_LED_STATUS,
     SET_DOOR_STATUS,
     SET_FAN_LEVEL,
 } from "./deviceType"
 
-export const toggleOnOff = payload => {
-    // payload = {name, id}
-    return {
-        type: TOGGLE_ON_OFF,
-        payload
-    }
-}
+const LED_URL = '/device/led'
+const FAN_URL = 'device/fan'
+const DOOR_URL = '/device/door'
 
 export const getLedStatus = () => {
     return dispatch => {
-        axios.get('http://localhost:5000/device/led')
+        axios.get(LED_URL)
             .then(response => dispatch(setLedStatus(response.data)))
             .catch(error => new Error(error.message))
     }
@@ -26,7 +19,7 @@ export const getLedStatus = () => {
 
 export const getFanStatus = () => {
     return dispatch => {
-        axios.get('http://localhost:5000/device/led')
+        axios.get(FAN_URL)
             .then(response => dispatch(setFanLevel(response.data)))
             .catch(error => new Error(error.message))
     }
@@ -34,7 +27,7 @@ export const getFanStatus = () => {
 
 export const getDoorStatus = () => {
     return dispatch => {
-        axios.get('http://localhost:5000/device/led')
+        axios.get(DOOR_URL)
             .then(response => dispatch(setDoorStatus(response.data)))
             .catch(error => new Error(error.message))
     }
@@ -42,7 +35,7 @@ export const getDoorStatus = () => {
 
 export const toggleLed = payload => {
     return dispatch => {
-        axios.post('http://localhost:5000/device/led', payload)
+        axios.post(LED_URL, payload)
             .then(response => {
                 dispatch(setLedStatus(payload))
                 console.log('toggle Successfull')
@@ -54,7 +47,7 @@ export const toggleLed = payload => {
 
 export const toggleDoor = payload => {
     return dispatch => {
-        axios.post('http://localhost:5000/device/door', payload)
+        axios.post(DOOR_URL, payload)
             .then(response => {
                 dispatch(setDoorStatus(payload))
                 console.log('toggle successuful')
@@ -65,7 +58,7 @@ export const toggleDoor = payload => {
 
 export const adjustFanLevel = payload => {
     return dispatch => {
-        axios.get('http://localhost:5000/device/fan', payload)
+        axios.get(FAN_URL, payload)
             .then(response => dispatch(setFanLevel(payload)))
             .catch(error => new Error(error.message))
     }
