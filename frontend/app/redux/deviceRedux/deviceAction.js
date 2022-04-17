@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../api/axios'
 import { 
     SET_LED_STATUS,
     SET_DOOR_STATUS,
@@ -12,7 +12,11 @@ const DOOR_URL = '/device/door'
 export const getLedStatus = () => {
     return dispatch => {
         axios.get(LED_URL)
-            .then(response => dispatch(setLedStatus(response.data)))
+            .then(response => {
+                const ledStatus = response.data.value
+
+                dispatch(setLedStatus(ledStatus))
+            })
             .catch(error => new Error(error.message))
     }
 }
@@ -20,7 +24,10 @@ export const getLedStatus = () => {
 export const getFanStatus = () => {
     return dispatch => {
         axios.get(FAN_URL)
-            .then(response => dispatch(setFanLevel(response.data)))
+            .then(response => {
+                const fanLevel = response.data.value
+                dispatch(setFanLevel(fanLevel))
+            })
             .catch(error => new Error(error.message))
     }
 }
@@ -28,7 +35,11 @@ export const getFanStatus = () => {
 export const getDoorStatus = () => {
     return dispatch => {
         axios.get(DOOR_URL)
-            .then(response => dispatch(setDoorStatus(response.data)))
+            .then(response => {
+                const doorStatus = response.data.value
+
+                dispatch(setDoorStatus(doorStatus))
+            })
             .catch(error => new Error(error.message))
     }
 }

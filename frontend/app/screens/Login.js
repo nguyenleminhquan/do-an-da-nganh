@@ -6,12 +6,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import {login} from '../redux/authenRedux/authenActions'
+import { getDoorStatus, getFanStatus, getLedStatus } from '../redux/deviceRedux/deviceAction';
 
 const Login = () => {
     const dispatch = useDispatch()
     const loginSuccess = useSelector(state => state.authen.loginSuccess)
     const errorMsg = useSelector(state => state.authen.errorMsg)
     const navigation = useNavigation();
+    const [required, setRequired] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [hide, setHide] = useState(true)
@@ -19,9 +21,10 @@ const Login = () => {
         setHide(!hide);
     }
     const loginAction = () => {
-        // const userInfo = {username, password}
-        // dispatch(login(userInfo))
-        navigation.navigate('Main')
+        if (username !== '' && password!== '') {
+            const userInfo = {username, password}
+            dispatch(login(userInfo))
+        } else setRequired('Required')
     }
     const navToSignUp = () => {
         navigation.navigate('Register');
@@ -30,11 +33,14 @@ const Login = () => {
         Keyboard.dismiss();
     }
 
-    // useEffect(() => {
-    //     if (loginSuccess) {
-    //         navigation.navigate('Main');
-    //     }
-    // }, [loginSuccess])
+    useEffect(() => {
+        if (loginSuccess) {
+            dispatch(getDoorStatus())
+            dispatch(getLedStatus())
+            dispatch(getFanStatus())
+            navigation.navigate('Main');
+        }
+    }, [loginSuccess])
 
     return (
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -50,6 +56,7 @@ const Login = () => {
                     placeholder='Enter your username'
                 />
             </View>
+            <Text style={styles.errorMsg}>{username === '' && required}</Text>
             <Text style={styles.labelText}>Password:</Text>
             <View style={styles.inputbox}>
                 <FontAwesome name="lock" size={24} color={colors.MAIN}/>
@@ -61,14 +68,15 @@ const Login = () => {
                 />
                 <TouchableOpacity style={styles.hideBtn}
                     onPress={updateSecureTextEntry}
-                >
+                    >
                     {hide ? 
                     <Feather name="eye-off" color="grey" size={20}/>
                     :
                     <Feather name="eye" color="grey" size={20}/>
-                    }
+                }
                 </TouchableOpacity>
             </View>
+            <Text style={styles.errorMsg}>{password === '' && required}</Text>
             <TouchableOpacity
                 style={styles.loginBtn}
                 onPress={loginAction}
@@ -152,5 +160,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         marginTop: 20
+    },
+    errorMsg: {
+        color: 'red',
     }
 });

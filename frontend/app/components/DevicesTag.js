@@ -1,15 +1,17 @@
 import { Text, View,TouchableOpacity, StyleSheet, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../misc/colors';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
+import { adjustFanLevel, getDoorStatus, getFanStatus, getLedStatus, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 
 const DeviceTag = (props) => {
     const dispatch = useDispatch()
     const device = useSelector(state => state.device.devices.find(device => device.name === props.name))
     
     const [status, setStatus] = useState(device.active)
+
+    console.log(status)
 
     const [btnName, setBtnName] = useState(() => {
         if (device.name === 'Fan') {
@@ -25,19 +27,19 @@ const DeviceTag = (props) => {
         console.log(btnName)
         if (btnName === 'Off') {
             if (device.name === 'Light') {
-                dispatch(toggleLed('1'))
+                dispatch(toggleLed({value: '0'}))
             }
             else if (device.name === 'Door') {
-                dispatch(toggleDoor('1'))
+                dispatch(toggleDoor({value: '0'}))
             }
             setBtnName('On')
             setStatus('0')
         } else if (btnName === 'On') {
             if (device.name === 'Light') {
-                dispatch(toggleLed('0'))
+                dispatch(toggleLed({value: '1'}))
             }
             else if (device.name === 'Door') {
-                dispatch(toggleDoor('0'))
+                dispatch(toggleDoor({value: '1'}))
             }
             setBtnName('Off')
             setStatus('1')
@@ -45,7 +47,7 @@ const DeviceTag = (props) => {
             // Link to adjust fan modal
         }
     }
-
+    
     // Hien tai chi co 1 thiet bi o moi phong
     return (
         <Pressable style={styles.container}>

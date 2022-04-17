@@ -48,6 +48,7 @@ const deviceReducer = (state = initState, action) => {
         case SET_LED_STATUS:
             updatedDevices = state.devices.map(device => {
                 if (device.name === 'Light') {
+                    console.log(action.payload)
                     return {
                         ...device,
                         active: action.payload
