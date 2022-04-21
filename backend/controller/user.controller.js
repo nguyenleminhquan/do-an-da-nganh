@@ -15,12 +15,12 @@ const registerUser = async (req, res, next) => {
         try {
             console.log(1)
             newUser = await newUser.save()
-            res.json({
+            return res.json({
                 msg: "Register successfully"
             })
             next()
         } catch (error) {
-            throw new Error(error)
+            return next(error)
         }
     }
 }
@@ -35,7 +35,7 @@ const loginUser = async (req, res, next) => {
         // if match
         if (match) {
             const token = generateToken({ username })
-            res.json({
+            return res.json({
                 id: exist._id,
                 username: exist.username,
                 fullname: exist.fullname,
