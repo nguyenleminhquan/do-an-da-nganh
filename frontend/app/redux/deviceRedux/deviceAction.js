@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from '../../api/axios'
 import { 
     SET_LED_STATUS,
@@ -15,6 +16,8 @@ export const getLedStatus = () => {
             .then(response => {
                 const ledStatus = response.data.value
 
+                AsyncStorage.setItem('Light', JSON.stringify(ledStatus))
+                console.log('Led status: ', ledStatus)
                 dispatch(setLedStatus(ledStatus))
             })
             .catch(error => new Error(error.message))
@@ -26,6 +29,9 @@ export const getFanStatus = () => {
         axios.get(FAN_URL)
             .then(response => {
                 const fanLevel = response.data.value
+
+                AsyncStorage.setItem('Fan', JSON.stringify(fanLevel))
+                console.log('Fan level: ', fanLevel)
                 dispatch(setFanLevel(fanLevel))
             })
             .catch(error => new Error(error.message))
@@ -38,6 +44,8 @@ export const getDoorStatus = () => {
             .then(response => {
                 const doorStatus = response.data.value
 
+                AsyncStorage.setItem('Door', JSON.stringify(doorStatus))
+                console.log('Door Status: ', doorStatus)
                 dispatch(setDoorStatus(doorStatus))
             })
             .catch(error => new Error(error.message))
@@ -49,6 +57,8 @@ export const toggleLed = payload => {
         axios.post(LED_URL, payload)
             .then(response => {
                 dispatch(setLedStatus(payload))
+                // console.log(typeof payload.value)
+                AsyncStorage.setItem('Light', JSON.stringify(payload?.value))
                 console.log('toggle Successfull')
             })
                 
@@ -61,6 +71,7 @@ export const toggleDoor = payload => {
         axios.post(DOOR_URL, payload)
             .then(response => {
                 dispatch(setDoorStatus(payload))
+                AsyncStorage.setItem('Door', JSON.stringify(payload?.value))
                 console.log('toggle successuful')
             })
             .catch(error => new Error(error.message))
@@ -70,7 +81,10 @@ export const toggleDoor = payload => {
 export const adjustFanLevel = payload => {
     return dispatch => {
         axios.get(FAN_URL, payload)
-            .then(response => dispatch(setFanLevel(payload)))
+            .then(response => {
+                dispatch(setFanLevel(payload))
+                AsyncStorage.setItem('Fan', JSON.stringify(payload?.value))
+            })
             .catch(error => new Error(error.message))
     }
 }

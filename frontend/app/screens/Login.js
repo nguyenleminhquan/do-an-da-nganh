@@ -24,9 +24,6 @@ const Login = () => {
         if (username !== '' && password !== '') {
             const userInfo = {username, password}
             dispatch(login(userInfo))
-            dispatch(getDoorStatus())
-            dispatch(getLedStatus())
-            dispatch(getFanStatus())
         } else setRequired('Required')
     }
     const navToSignUp = () => {

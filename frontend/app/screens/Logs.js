@@ -8,7 +8,7 @@ import colors from '../misc/colors';
 const Logs = () => {
 
   const [deviceName, setDeviceName] = useState('Light');
-  //const [room, setRoom] = useState('Living Room');
+  const [room, setRoom] = useState('Living Room');
   const [day, setDay] = useState(new Date());
   const [show, setShow] = useState(false);
 

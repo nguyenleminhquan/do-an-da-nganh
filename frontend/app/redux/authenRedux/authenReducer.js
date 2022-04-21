@@ -7,7 +7,7 @@ const initState = {
     loginSuccess: Object.keys(user).length === 0 ? false : true,
     registerSuccess: false,
     errorMsg: '',
-    user: user
+    user: user,
 }
 
 const authenReducer = (state = initState, action) => {

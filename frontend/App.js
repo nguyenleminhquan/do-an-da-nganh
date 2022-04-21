@@ -1,14 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Provider } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import store from './app/redux/store'
 //import Login from './app/screens/Login';
 //import Register from './app/screens/Register';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Intro from './app/screens/Intro';
 import Main from './app/screens/Main';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
 // import Logs from './app/screens/Logs';
 // import LogTag from './app/components/logTag';
 // import Home from './app/screens/Home';
@@ -18,12 +21,22 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [loginSuccess, setLoginSuccess] = useState(false)
+
+  useEffect(() => {
+    const value = AsyncStorage.getItem('user')
+    value.then(res => {
+      if (JSON.parse(res)?.token) setLoginSuccess(true)
+    })
+  }, [])
+
+  console.log(loginSuccess)
   return (
     <SafeAreaProvider>
       <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}}/>
+          {!loginSuccess && <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}}/>}
           <Stack.Screen name="Main" component={Main} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>

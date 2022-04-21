@@ -1,5 +1,6 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from '../misc/colors';
@@ -10,13 +11,19 @@ const DeviceTag = (props) => {
     const dispatch = useDispatch()
     const device = useSelector(state => state.device.devices.find(device => device.name === props.name))
 
-    const [status, setStatus] = useState(device.active)
+    const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        const value = AsyncStorage.getItem(device.name)
+        value.then(res => setStatus(JSON.parse(res)))
+    }, [])
+
     const [showAdjustFanModal, setShowAdjustFanModal] = useState(false);
 
     //goi api de lay gia tri gan cho fanvalue
     const [fanValue, setFanValue] = useState(0);
 
-    console.log(status)
+    // console.log(`${device.name} status: ${status}`)
 
     const [btnName, setBtnName] = useState(() => {
         if (device.name === 'Fan') return 'Adjust'
@@ -27,10 +34,30 @@ const DeviceTag = (props) => {
             if (status === '0') return 'On'
             else return 'Off'
         }
-    })
+    })      
     
     const handleDeviceClick = () => {
-        
+        if (device.name === 'Door') {
+            if (status === '0') {
+                dispatch(toggleDoor({value: '90'}))
+                setStatus('90')
+                setBtnName('Open')
+            } else {
+                dispatch(toggleDoor({value: '0'}))
+                setStatus('0')
+                setBtnName('Close')
+            }
+        } else if (device.name === 'Light') {
+            if (status === '0') {
+                dispatch(toggleLed({value: '1'}))
+                setStatus('1')
+                setBtnName('Off')
+            } else {
+                dispatch(toggleLed({value: '0'}))
+                setStatus('0')
+                setBtnName('On')
+            }
+        }
     }
     const handleAdjustFan = (value) => {
         //Post fan value 

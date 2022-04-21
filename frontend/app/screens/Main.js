@@ -4,7 +4,7 @@ import colors from '../misc/colors';
 import Home from './Home';
 import Logs from './Logs';
 import Messages from './Messages';
-import TimerScreen from './timerScreen';
+import TimerScreen from './TimerScreen';
 
 const Tab = createBottomTabNavigator();
 

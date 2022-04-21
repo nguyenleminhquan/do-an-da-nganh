@@ -1,5 +1,6 @@
-// import axios from '../../api/axios'
-import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from '../../api/axios'
+import { getDoorStatus, getFanStatus, getLedStatus } from '../deviceRedux/deviceAction'
 import { LOGIN_FAILURE, LOGIN_SUCCESS, REGISTER_FAILURE, REGISTER_SUCCESS } from "./authenType"
 
 const LOGIN_URL = '/user/login'
@@ -7,12 +8,15 @@ const REGISTER_URL = '/user/register'
 
 export const login = payload => {
     return dispatch => {
-        axios.post('http://localhost:5000/user/login', payload)
+        axios.post(LOGIN_URL, payload)
             .then(response => {
                 const user = response.data
 
-                localStorage.setItem('user', JSON.stringify(user))
+                AsyncStorage.setItem('user', JSON.stringify(user))
                 dispatch(loginSuccess(user))
+                dispatch(getFanStatus())
+                dispatch(getDoorStatus())
+                dispatch(getLedStatus())
                 console.log('Login Successfully!!!')
             })
             .catch(error => {
@@ -28,7 +32,7 @@ export const login = payload => {
 
 export const register = payload => {
     return dispatch => {
-        axios.post('http://localhost:5000/user/register', payload) 
+        axios.post(REGISTER_URL, payload) 
             .then(response => {
                 const users = response.data
                 dispatch(registerSuccess(users))

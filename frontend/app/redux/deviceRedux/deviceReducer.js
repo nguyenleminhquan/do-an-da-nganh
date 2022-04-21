@@ -10,17 +10,17 @@ const initState = {
         {
             name: 'Fan',
             iconName: 'fan',
-            active: '0',
+            active: '',
         },
         {
             name: 'Door',
             iconName: 'door-open',
-            active: '90', 
+            active: '', 
         },
         {
             name: 'Light',
             iconName: 'lightbulb',
-            active: '0'
+            active: ''
         },
     ],
 
