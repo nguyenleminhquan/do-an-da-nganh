@@ -15,7 +15,7 @@ const initState = {
         {
             name: 'Door',
             iconName: 'door-open',
-            active: '0', 
+            active: '90', 
         },
         {
             name: 'Light',

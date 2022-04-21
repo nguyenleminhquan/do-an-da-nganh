@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 const LogoutBtn = (props) => {
   return (
     <TouchableOpacity style={styles.container}
-        onPress={props.handleLogout}
+        onPress={props.onPress}
     >
         <Ionicons name="log-out" size={24} color="white" />
     </TouchableOpacity>

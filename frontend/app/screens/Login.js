@@ -21,9 +21,12 @@ const Login = () => {
         setHide(!hide);
     }
     const loginAction = () => {
-        if (username !== '' && password!== '') {
+        if (username !== '' && password !== '') {
             const userInfo = {username, password}
             dispatch(login(userInfo))
+            dispatch(getDoorStatus())
+            dispatch(getLedStatus())
+            dispatch(getFanStatus())
         } else setRequired('Required')
     }
     const navToSignUp = () => {
@@ -35,9 +38,6 @@ const Login = () => {
 
     useEffect(() => {
         if (loginSuccess) {
-            dispatch(getDoorStatus())
-            dispatch(getLedStatus())
-            dispatch(getFanStatus())
             navigation.navigate('Main');
         }
     }, [loginSuccess])

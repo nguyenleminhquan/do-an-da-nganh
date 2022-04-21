@@ -15,32 +15,7 @@ const port = 5000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-// client.on('connect', () => {
-//     console.log('Connected')
-//     client.subscribe([topic], () => {
-//         console.log(`Subscribe to topic '${topic}'`)
-//     })
-//     client.subscribe([topic1], () => {
-//         console.log(`Subscribe to topic '${topic1}'`)
-//     })
-//     client.publish(topic, '1', { qos: 0, retain: false }, (error) => {
-//         if (error) {
-//             console.error(error)
-//         }
-//     })
-//     client.publish(topic1, '0', { qos: 0, retain: false }, (error) => {
-//         if (error) {
-//             console.error(error)
-//         }
-//     })})
 
-// client.on('message', (topic, payload) => {
-//     console.log('Received Message:', topic, payload.toString())
-// })
-
-// client.on('message', (topic1, payload) => {
-//     console.log('Received Message:', topic1, payload.toString())
-// })
 const connectUrl = `mqtt://io.adafruit.com:1883`
 const client = mqtt.connect(connectUrl, {
     clientId: 558429,
@@ -48,7 +23,7 @@ const client = mqtt.connect(connectUrl, {
     connectTimeout: 4000,
     username: 'TSang2907',
     reconnectPeriod: 1000,
-    password: 'aio_nscs88QxkrwLBqsXUs8B6Pii3wU7'
+    password: 'aio_tIee32p1DRssmuWB6s6IB41bh5wY'
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
@@ -90,31 +65,31 @@ app.post('/device/led', (req, res, next) => {
     const value = req.body.value
     client.publish(led, value, { qos: 0, retain: false }, (error) => {
         if (error) {
-            console.error(error)
+            return next(error)
         }
     })
-    res.json({ msg: "Successfully" })
+    return res.json({ msg: "Successfully" })
 })
 
 app.post('/device/fan', (req, res, next) => {
     const value = req.body.value
     client.publish(fan, value, { qos: 0, retain: false }, (error) => {
         if (error) {
-            console.error(error)
+            return next(error)
         }
     })
 
-    res.json({ msg: "Succesfully" })
+    return res.json({ msg: "Succesfully" })
 })
 
 app.post('/device/door', (req, res, next) => {
     const value = req.body.value
     client.publish(door, value, { qos: 0, retain: false }, (error) => {
         if (error) {
-            console.error(error)
+            return next(error)
         }
     })
-    res.json({ msg: "Succesfully" })
+    return res.json({ msg: "Succesfully" })
 })
 
 app.use('/user', userRoutes)
