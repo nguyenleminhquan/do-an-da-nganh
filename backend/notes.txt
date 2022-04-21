@@ -1,0 +1,4 @@
+- lưu boundary value của cảm biến trong mongodb.
+- API cho cài đặt boundary value cho cảm biến (nhiệt độ, độ ẩm).
+- check realtime giá trị cảm biến để cảnh báo người dùng qua email: setInterval?.
+- xem lịch sử hoạt động.

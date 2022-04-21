@@ -1,6 +1,10 @@
 import express from 'express'
 import mqtt from 'mqtt'
 import dotenv from 'dotenv'
+import nodemailer from 'nodemailer'
+import { Server } from 'socket.io'
+import axios from 'axios'
+
 import connectDB from './config/db.js'
 import APINotFound from './middlewares/APINotFound.js'
 import errorHandler from './middlewares/errorHandler.js'
@@ -12,6 +16,73 @@ connectDB()
 dotenv.config()
 const app = express()
 const port = 5000
+
+const io = new Server(4000)
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.USERNAME,
+        pass: process.env.PASSWORD
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+})
+
+let mailOption_gas = {
+    from: 'doandanganh.hk212@gmail.com',
+    to: 'fx.nguyenleminhquan@gmail.com',
+    subject: '',
+    text: ''
+}
+
+let mailOption_temp = {
+    from: 'doandanganh.hk212@gmail.com',
+    to: 'fx.nguyenleminhquan@gmail.com',
+    subject: '',
+    text: ''
+}
+// 
+io.on('connection', socket => {
+    console.log('Connect ' + socket.id)
+    setInterval(async () => {
+        try {
+            const gas = await axios.get('https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-gas')
+            const temp = await axios.get('https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-temp')
+            const gas_data = gas.data.last_value
+            const temp_data = temp.data.last_value
+
+            if (parseInt(gas_data) > 700) {
+                const time = new Date()
+                socket.emit('warning_gas', time)
+                mailOption_gas.subject = 'Cảnh báo rò rỉ khí gas: ' + time
+                mailOption_gas.text = 'Có dấu hiệu bất thường về nồng độ khí gas cao vào lúc ' + time
+                transporter.sendMail(mailOption_gas, (err, success) => {
+                    if (err) throw err
+                    else {
+                        console.log('Send mail successfully')
+                    }
+                })
+                setTimeout(() => {}, 600000)
+            }
+            if (parseFloat(temp_data) > 38) {
+                const time = new Date()
+                socket.emit('warning_temp', time)
+                mailOption_temp.subject = 'Cảnh báo nhiệt độ cao: ' + time
+                mailOption_temp.text = 'Nhiệt độ đang cao vào lúc ' + time
+                transporter.sendMail(mailOption_temp, (err, success) => {
+                    if (err) throw err
+                    else {
+                        console.log('Send mail successfully')
+                    }
+                })
+                setTimeout(() => {}, 600000)
+            }
+        } catch (error) {
+            next(error)            
+        }
+    }, 1000)
+})
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -105,3 +176,4 @@ app.use(errorHandler)
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`)
 })
+
