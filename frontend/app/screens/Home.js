@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { Alert, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import DevicesTag from '../components/DevicesTag';
 import LogoutBtn from '../components/LogoutBtn';
 import RoomBtn from '../components/RoomBtn';
 import colors from '../misc/colors';
-
+import { logout } from '../redux/authenRedux/authenActions';
+import Intro from './Intro';
 
 const ROOM = [
   {
@@ -40,12 +42,36 @@ const Rooms = ({ name, chosen, onPress }) => {
 }
 
 const Home = () => {
+  const dipatch = useDispatch()
+  const navigation = useNavigation()
   const [greet, setgreet] = useState('');
   const [iconGreet, setIconGreet] = useState('');
   const [greetColor, setGreetColor] = useState('');
   const devices = useSelector(state => state.device.devices)
 
-  const handleLogout = () => { }
+  const handleLogout = () => {
+    // Alert.alert(
+    //   'Do you want to logout?',
+    //   'This will return to login screen.', [
+    //     {
+    //       text: 'Logout',
+    //       onPress: () => {
+    //         console.warn('Do not show Pressed!')
+    //         dipatch(logout())
+    //         navigation.navigate('Intro')
+    //       }
+    //     },
+    //     {
+    //       text: 'Cancel'
+    //     },
+    //   ],
+    //   {
+    //     cancelable: true
+    //   })
+
+      dipatch(logout())
+      navigation.navigate('Intro')
+  }
 
   const findGreet = () => {
     const hrs = new Date().getHours();

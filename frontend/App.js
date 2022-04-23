@@ -24,7 +24,7 @@ export default function App() {
   const [loginSuccess, setLoginSuccess] = useState(false)
 
   useEffect(() => {
-    const value = AsyncStorage.getItem('user')
+    const value = AsyncStorage.getItem('user') || {}
     value.then(res => {
       if (JSON.parse(res)?.token) setLoginSuccess(true)
     })

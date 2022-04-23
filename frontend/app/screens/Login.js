@@ -14,15 +14,15 @@ const Login = () => {
     const errorMsg = useSelector(state => state.authen.errorMsg)
     const navigation = useNavigation();
     const [required, setRequired] = useState('')
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [hide, setHide] = useState(true)
     const updateSecureTextEntry = () => {
         setHide(!hide);
     }
     const loginAction = () => {
-        if (username !== '' && password !== '') {
-            const userInfo = {username, password}
+        if (email !== '' && password !== '') {
+            const userInfo = {username: email, password}
             dispatch(login(userInfo))
         } else setRequired('Required')
     }
@@ -33,9 +33,15 @@ const Login = () => {
         Keyboard.dismiss();
     }
 
+    async function getDeviceStatus() {
+        dispatch(getDoorStatus())
+        dispatch(getFanStatus())
+        dispatch(getLedStatus())
+    }
+
     useEffect(() => {
-        if (loginSuccess) {
-            navigation.navigate('Main');
+        if (loginSuccess) {            
+            getDeviceStatus().then(() => navigation.navigate('Main'))
         }
     }, [loginSuccess])
 
@@ -44,16 +50,16 @@ const Login = () => {
         <SafeAreaView style={styles.container}>
             <Text style={styles.nameText}>SMART HOME</Text>
             <Text>{errorMsg && errorMsg}</Text>
-            <Text style={styles.labelText}>Username:</Text>
+            <Text style={styles.labelText}>Email:</Text>
             <View style={styles.inputbox}>
                 <FontAwesome name="user" size={24} color={colors.MAIN}/>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text)=>{setUsername(text)}}
-                    placeholder='Enter your username'
+                    onChangeText={(text)=>{setEmail(text)}}
+                    placeholder='Enter your email'
                 />
             </View>
-            <Text style={styles.errorMsg}>{username === '' && required}</Text>
+            <Text style={styles.errorMsg}>{email === '' && required}</Text>
             <Text style={styles.labelText}>Password:</Text>
             <View style={styles.inputbox}>
                 <FontAwesome name="lock" size={24} color={colors.MAIN}/>

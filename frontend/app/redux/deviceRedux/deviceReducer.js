@@ -29,22 +29,6 @@ const initState = {
 const deviceReducer = (state = initState, action) => {
     let updatedDevices
     switch (action.type) {
-        // case TOGGLE_ON_OFF:
-        //     const targetDevice = state.devices.find(element => action.payload.name === element.name)
-
-        //     const updatedDevice = {
-        //         ...targetDevice, 
-        //         isOn: isOn.map(function(value, index) {
-        //             if (index === action.payload.id) {
-        //                 return !value
-        //             }
-        //             return value
-        //         })
-        //     }
-        //     return {
-        //         ...state, 
-        //         updatedDevice
-        //     }
         case SET_LED_STATUS:
             updatedDevices = state.devices.map(device => {
                 if (device.name === 'Light') {
@@ -88,7 +72,6 @@ const deviceReducer = (state = initState, action) => {
                 ...state,
                 devices: updatedDevices
             }
-        
         default: 
             return state
     }
