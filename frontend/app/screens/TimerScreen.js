@@ -6,6 +6,8 @@ import CreateTimerModal from '../components/CreateTimerModal';
 import LogoutBtn from '../components/LogoutBtn';
 import colors from '../misc/colors';
 import TimerTag from '../components/TimerTag'
+import { useDispatch, useSelector } from 'react-redux';
+import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 
 const reverseData = data => {
     return data.sort((a, b) => {
@@ -18,10 +20,13 @@ const reverseData = data => {
 };
 
 const TimerScreen = () => {
-
+    const dispatch = useDispatch()
+    const devices = useSelector(state => state.device.devices)
+    
     const [timers, setTimers] = useState([]);
     const [showCreateTimer, setShowCreateTimer] = useState(false);
     //const { timers, setTimers, findTimers } = useTimers();
+    const [startTimer, setStartTimer] = useState(false)
     const reverseTimers = reverseData(timers);
 
     const handleLogout = () => { }
@@ -29,6 +34,7 @@ const TimerScreen = () => {
         const timer = { id: Date.now(), deviceName, timeOn, timeOff };
         const updatedTimers = [...timers, timer];
         setTimers(updatedTimers);
+        setStartTimer(true)
         await AsyncStorage.setItem('timers', JSON.stringify(updatedTimers));
         
         // console.log(timers);
@@ -37,17 +43,52 @@ const TimerScreen = () => {
     const findTimers = async () => {
         const result = await AsyncStorage.getItem('timers');
         if (result) setTimers(JSON.parse(result));
-        //console.log(result);
         //console.log(timers[0].timeOn);
+    }
+
+    const handleAutoControlDevice = () => {
+        setInterval(() => {
+            let currentTime = (new Date()).toISOString()
+            
+            timers.forEach(async (timer) => {
+                if (timer.timeOn <= currentTime) {
+                    const value = await AsyncStorage.getItem(timer.deviceName)
+                    const deviceStatus = JSON.parse(value)
+
+                    if (timer.deviceName === 'Light' && deviceStatus === '0') {
+                        console.log('aasdasd')
+                        dispatch(toggleLed({value: '1'}))
+                    } else if (timer.deviceName === 'Door' && deviceStatus === '90') {
+                        dispatch(toggleDoor({value: '0'}))
+                        console.log('aasdasd')
+                    } else if (timer.deviceName === 'Fan' && deviceStatus === '0') {
+                        dispatch(adjustFanLevel({value: '100'}))
+                        console.log('aasdasd')
+                    }
+                } else if (timer.timeOff === currentTime) {
+                    if (timer.deviceName === 'Light' && deviceStatus === '1') {
+                        dispatch(toggleLed({value: '0'}))
+                        console.log('aasdasd')
+                    } else if (timer.deviceName === 'Door' && deviceStatus === 0) {
+                        dispatch(toggleDoor({value: '90'}))
+                        console.log('aasdasd')
+                    } else if (timer.deviceName === 'Fan' && deviceStatus === '100') {
+                        dispatch(adjustFanLevel({value: '0'}))
+                        console.log('aasdasd')
+                        }
+                }
+            })
+        }, 1000)
     }
 
     useEffect(() => {
         //AsyncStorage.clear();
         findTimers();
+    }, [])
 
-    }, []);
-
-
+    useEffect(() => {
+        handleAutoControlDevice()
+    }, [timers])
     return (
         <>
             <StatusBar hidden />
