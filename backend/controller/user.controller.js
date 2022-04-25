@@ -40,9 +40,9 @@ const loginUser = async (req, res, next) => {
                 username: exist.username,
                 fullname: exist.fullname,
                 home: exist.myhome,
+                history: exist.history,
                 token: token
             })
-            next()
         } else {
             return next(createError(400, "Password doesn't match"))
         }

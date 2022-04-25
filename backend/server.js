@@ -94,7 +94,8 @@ const client = mqtt.connect(connectUrl, {
     clean: true,
     connectTimeout: 4000,
     username: 'TSang2907',
-    reconnectPeriod: 1000
+    reconnectPeriod: 1000,
+    password: process.env.ADAFRUIT_KEY
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
