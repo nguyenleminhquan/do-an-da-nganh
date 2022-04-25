@@ -51,7 +51,13 @@ const loginUser = async (req, res, next) => {
     }
 }
 
+const getHistory = async (req, res, next) => {
+    const user = await User.findOne({ username: req.username })
+    return res.json({ history: user.history })
+}
+
 export {
     loginUser,
-    registerUser
+    registerUser,
+    getHistory
 }
