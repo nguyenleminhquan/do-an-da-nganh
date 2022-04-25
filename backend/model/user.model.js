@@ -8,7 +8,8 @@ const userSchema = mongoose.Schema({
     myhome: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Home'
-    }
+    },
+    history: [{ type: String }]
 })
 
 userSchema.pre('save', function (next) {
