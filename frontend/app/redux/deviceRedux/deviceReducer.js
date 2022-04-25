@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { 
     SET_FAN_LEVEL,
     SET_LED_STATUS,
@@ -5,7 +6,6 @@ import {
 } from "./deviceType"
 
 const initState = {
-    // ledStatus: 0, 
     devices: [
         {
             name: 'Fan',
@@ -23,7 +23,6 @@ const initState = {
             active: ''
         },
     ],
-
 }
 
 const deviceReducer = (state = initState, action) => {

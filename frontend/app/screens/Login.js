@@ -42,6 +42,7 @@ const Login = () => {
     useEffect(() => {
         if (loginSuccess) {            
             getDeviceStatus().then(() => navigation.navigate('Main'))
+            // navigation.navigate('Main')
         }
     }, [loginSuccess])
 

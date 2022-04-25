@@ -1,17 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useState } from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Provider } from 'react-redux';
-import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import store from './app/redux/store'
-//import Login from './app/screens/Login';
-//import Register from './app/screens/Register';
 import Intro from './app/screens/Intro';
 import Main from './app/screens/Main';
 import { useEffect } from 'react';
+// import Login from './app/screens/Login';
+// import Register from './app/screens/Register';
 // import Logs from './app/screens/Logs';
 // import LogTag from './app/components/logTag';
 // import Home from './app/screens/Home';
@@ -23,14 +22,11 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [loginSuccess, setLoginSuccess] = useState(false)
 
-  useEffect(() => {
-    const value = AsyncStorage.getItem('user') || {}
-    value.then(res => {
-      if (JSON.parse(res)?.token) setLoginSuccess(true)
-    })
+  useEffect(async () => {
+    const value = await AsyncStorage.getItem('user') || {}
+    if (Object.keys(value).length !== 0) setLoginSuccess(true)
   }, [])
 
-  console.log(loginSuccess)
   return (
     <SafeAreaProvider>
       <Provider store={store}>
@@ -40,6 +36,8 @@ export default function App() {
           <Stack.Screen name="Main" component={Main} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
+      {/* {!loginSuccess ? <Intro /> : <Main />} */}
+      {/* <Intro /> */}
       </Provider>
     </SafeAreaProvider>
   );

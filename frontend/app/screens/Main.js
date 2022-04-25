@@ -1,18 +1,19 @@
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import { NavigationContainer } from '@react-navigation/native';
 import colors from '../misc/colors';
 import Home from './Home';
 import Logs from './Logs';
 import Messages from './Messages';
 import TimerScreen from './TimerScreen';
+import Login from './Login';
 
 const Tab = createBottomTabNavigator();
 
-
 function Main() {
-  //const [a, seta] = useState(1);
   return (
-
+    // <NavigationContainer>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -41,8 +42,11 @@ function Main() {
         options={{
           tabBarIcon: ({ color }) => <FontAwesome name="history" size={24} color={color} />
         }}
+    
       />
     </Tab.Navigator>
+        // <Stack.Screen name='Login' component={Login} options={{headerShown:false}} />
+    // </NavigationContainer>
 
   );
 }
