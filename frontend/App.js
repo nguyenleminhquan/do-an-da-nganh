@@ -9,15 +9,15 @@ import store from './app/redux/store'
 import Intro from './app/screens/Intro';
 import Main from './app/screens/Main';
 import { useEffect } from 'react';
-// import Login from './app/screens/Login';
-// import Register from './app/screens/Register';
+import Login from './app/screens/Login';
+import Register from './app/screens/Register';
 // import Logs from './app/screens/Logs';
 // import LogTag from './app/components/logTag';
 // import Home from './app/screens/Home';
 // import LogoutBtn from './app/components/LogoutBtn';
 //import DeviceTag from './app/components/DeviceTag';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();  
 
 export default function App() {
   const [loginSuccess, setLoginSuccess] = useState(false)
@@ -30,14 +30,14 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {!loginSuccess && <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}}/>}
-          <Stack.Screen name="Main" component={Main} options={{headerShown:false}}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-      {/* {!loginSuccess ? <Intro /> : <Main />} */}
-      {/* <Intro /> */}
+        <NavigationContainer>
+          <Stack.Navigator>
+            {!loginSuccess && <Stack.Screen name="Intro" component={Intro} options={{headerShown:false}}/>}
+            <Stack.Screen name="Main" component={Main} options={{headerShown:false}}/>
+            <Stack.Screen name='Login' component={Login} options={{headerShown:false}}/>
+            <Stack.Screen name='Register' component={Register} options={{headerShown:false}}/>
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     </SafeAreaProvider>
   );

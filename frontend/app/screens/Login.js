@@ -10,9 +10,9 @@ import { getDoorStatus, getFanStatus, getLedStatus } from '../redux/deviceRedux/
 
 const Login = () => {
     const dispatch = useDispatch()
+    const navigation = useNavigation()
     const loginSuccess = useSelector(state => state.authen.loginSuccess)
     const errorMsg = useSelector(state => state.authen.errorMsg)
-    const navigation = useNavigation();
     const [required, setRequired] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,25 +24,21 @@ const Login = () => {
         if (email !== '' && password !== '') {
             const userInfo = {username: email, password}
             dispatch(login(userInfo))
+            dispatch(getDoorStatus())
+            dispatch(getFanStatus())
+            dispatch(getLedStatus())
         } else setRequired('Required')
     }
     const navToSignUp = () => {
-        navigation.navigate('Register');
+        navigation.navigate('Register')
     }
     const dismissKeyboard = () =>{
         Keyboard.dismiss();
     }
 
-    async function getDeviceStatus() {
-        dispatch(getDoorStatus())
-        dispatch(getFanStatus())
-        dispatch(getLedStatus())
-    }
-
     useEffect(() => {
         if (loginSuccess) {            
-            getDeviceStatus().then(() => navigation.navigate('Main'))
-            // navigation.navigate('Main')
+            navigation.navigate('Main')
         }
     }, [loginSuccess])
 

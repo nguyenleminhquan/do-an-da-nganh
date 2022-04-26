@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../redux/authenRedux/authenActions';
 
 const Register = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation()
     const dispatch = useDispatch()
     const registerSuccess = useSelector(state => state.authen.registerSuccess)
 
@@ -27,7 +27,6 @@ const Register = () => {
         } else {
             setRequired('Required')
         }
-        // navigation.navigate('Main');
     }
     const navToLogin = () => {
         navigation.navigate('Login');

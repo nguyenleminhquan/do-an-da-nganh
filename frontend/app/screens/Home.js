@@ -8,7 +8,6 @@ import LogoutBtn from '../components/LogoutBtn';
 import RoomBtn from '../components/RoomBtn';
 import colors from '../misc/colors';
 import { logout } from '../redux/authenRedux/authenActions';
-import Intro from './Intro';
 
 const ROOM = [
   {
@@ -70,7 +69,7 @@ const Home = () => {
     //   })
 
       dipatch(logout())
-      navigation.navigate('Intro')
+      navigation.navigate('Login')
   }
 
   const findGreet = () => {
