@@ -8,15 +8,15 @@ import colors from '../misc/colors';
 import TimerTag from '../components/TimerTag'
 import { useDispatch, useSelector } from 'react-redux';
 
-const reverseData = data => {
-    return data.sort((a, b) => {
-        const aInt = new Date(a.timeOn);
-        const bInt = new Date(b.timeOn);
-        if (aInt > bInt) return 1;
-        if (aInt == bInt) return 0;
-        if (aInt < bInt) return -1;
-    });
-};
+// const reverseData = data => {
+//     return data.sort((a, b) => {
+//         const aInt = new Date(a.timeOn);
+//         const bInt = new Date(b.timeOn);
+//         if (aInt > bInt) return 1;
+//         if (aInt == bInt) return 0;
+//         if (aInt < bInt) return -1;
+//     });
+// };
 
 const TimerScreen = (props) => {
     const dispatch = useDispatch()
@@ -26,7 +26,7 @@ const TimerScreen = (props) => {
     const [showCreateTimer, setShowCreateTimer] = useState(false);
     //const { timers, setTimers, findTimers } = useTimers();
     const [startTimer, setStartTimer] = useState(false)
-    const reverseTimers = reverseData(timers);
+    // const reverseTimers = reverseData(timers);
 
     const handleLogout = () => { }
     const handleOnSave = async (deviceName, timeOn, timeOff) => {
@@ -36,6 +36,7 @@ const TimerScreen = (props) => {
         setStartTimer(true)
         await AsyncStorage.setItem('timers', JSON.stringify(updatedTimers));
         
+
         props.onScheduleTimer(timer, timers, setTimers)
         // Delete timer after finishing?
         // setTimers(props.onClearTimer(timers, timer))
@@ -63,7 +64,7 @@ const TimerScreen = (props) => {
                     onPress={() => setShowCreateTimer(true)}>
                     <Entypo name="plus" size={24} color="black" />
                 </TouchableOpacity>
-                <ScrollView>
+                {/* <ScrollView> */}
                     <FlatList data={timers}
                     keyExtractor={item=>item.id.toString()}
                     renderItem={({item})=><TimerTag 
@@ -73,7 +74,7 @@ const TimerScreen = (props) => {
                     id = {item.id}
                     />}
                     />
-                </ScrollView>
+                {/* </ScrollView> */}
             </View>
             <CreateTimerModal visible={showCreateTimer}
                 onSave={handleOnSave}

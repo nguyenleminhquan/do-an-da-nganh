@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { io } from 'socket.io-client';
 import store from './app/redux/store'
 import Intro from './app/screens/Intro';
 import Main from './app/screens/Main';
@@ -19,6 +20,8 @@ import Register from './app/screens/Register';
 
 const Stack = createNativeStackNavigator();  
 
+// const socket = io.connect('http://localhost:4000/')
+
 export default function App() {
   const [loginSuccess, setLoginSuccess] = useState(false)
 
@@ -26,6 +29,17 @@ export default function App() {
     const value = await AsyncStorage.getItem('user') || {}
     if (Object.keys(value).length !== 0) setLoginSuccess(true)
   }, [])
+
+  // useEffect(() => {
+  //   // socket.on('connection', () => {
+  //   //   console.log(socket)
+  //   // })
+
+  //   socket.emit('warning_gas', (time) => {
+  //     console.log(time)
+  //   })
+
+  //   })
 
   return (
     <SafeAreaProvider>

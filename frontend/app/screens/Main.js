@@ -25,6 +25,8 @@ function Main() {
     const value = await AsyncStorage.getItem(timer.deviceName)
     const deviceStatus = JSON.parse(value)
 
+    // Case: time on != current?
+
     // Dispatch an action turn on for devices
     if (timer.deviceName === 'Light' && deviceStatus === '0') {
       dispatch(toggleLed({value: '1'}))
@@ -46,14 +48,26 @@ function Main() {
       } else if (timer.deviceName === 'Fan') {
         dispatch(adjustFanLevel({value: '0'}))
       } 
-      // handleClearTimer()
-    }, remainTime)
+      // const newTimers = handleClearTimer(timer, timers)
+
+      // const result = await AsyncStorage.getItem('timers');
+      const newTimers = timers.filter(n=>n.id !== timer.id);
+      console.log(`new timers:`,newTimers)
+      AsyncStorage.setItem('timers', JSON.stringify(newTimers))
+        .then(res => res);
+
+      callback(newTimers)
+    }, 10000)
     // Clear setTimeout()?
   }
 
-  const handleClearTimer = () => {
-    const removeIdx = timers.findIndex(timer => timer.timeOff === targetTimer.timeOff)
-    setTimers(timers.splice(removeIdx))
+  const handleClearTimer = async (timer, timers) => {
+    // const removeIdx = timers.findIndex(timer => timer.timeOff === targetTimer.timeOff)
+    // setTimers(timers.splice(removeIdx))
+    const newTimers = timers.filter(n=>n.id !== timer.id);
+    console.log(`new timers:`,newTimers)
+    await AsyncStorage.setItem('timers', JSON.stringify(newTimers));
+    return newTimers
   }
   useEffect(() => {
     findTimers()
