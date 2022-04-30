@@ -57,7 +57,7 @@ function Main() {
         .then(res => res);
 
       callback(newTimers)
-    }, 10000)
+    }, remainTime)
     // Clear setTimeout()?
   }
 

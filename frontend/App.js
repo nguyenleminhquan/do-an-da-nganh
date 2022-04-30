@@ -20,26 +20,29 @@ import Register from './app/screens/Register';
 
 const Stack = createNativeStackNavigator();  
 
-// const socket = io.connect('http://localhost:4000/')
+// const socket = io.connect('http://localhost:400/')
 
 export default function App() {
   const [loginSuccess, setLoginSuccess] = useState(false)
 
+
   useEffect(async () => {
-    const value = await AsyncStorage.getItem('user') || {}
-    if (Object.keys(value).length !== 0) setLoginSuccess(true)
+    const value = await AsyncStorage.getItem('user')
+    // if (Object.keys(value).length !== 0) setLoginSuccess(true)
+    if (value) setLoginSuccess(true)
+    else setLoginSuccess(false)
   }, [])
 
   // useEffect(() => {
   //   // socket.on('connection', () => {
-  //   //   console.log(socket)
+  //   //   socket.emit('warning_gas', time => {
+  //   //     console.log(time)
+  //   //   })
   //   // })
-
-  //   socket.emit('warning_gas', (time) => {
+  //   socket.on('warning_gas', time => {
   //     console.log(time)
   //   })
-
-  //   })
+  // })
 
   return (
     <SafeAreaProvider>
