@@ -52,19 +52,18 @@ io.on('connection', socket => {
             const temp = await axios.get('https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-temp')
             const gas_data = gas.data.last_value
             const temp_data = temp.data.last_value
-
-            if (parseInt(gas_data) > 700) {
+    
+            if (parseInt(gas_data) > 300) {
                 const time = new Date()
                 socket.emit('warning_gas', time)
                 mailOption_gas.subject = 'Cảnh báo rò rỉ khí gas: ' + time
                 mailOption_gas.text = 'Có dấu hiệu bất thường về nồng độ khí gas cao vào lúc ' + time
                 transporter.sendMail(mailOption_gas, (err, success) => {
-                    if (err) throw err
+                    if (err) console.error(err)
                     else {
                         console.log('Send mail successfully')
                     }
                 })
-                setTimeout(() => {}, 600000)
             }
             if (parseFloat(temp_data) > 38) {
                 const time = new Date()
@@ -72,15 +71,14 @@ io.on('connection', socket => {
                 mailOption_temp.subject = 'Cảnh báo nhiệt độ cao: ' + time
                 mailOption_temp.text = 'Nhiệt độ đang cao vào lúc ' + time
                 transporter.sendMail(mailOption_temp, (err, success) => {
-                    if (err) throw err
+                    if (err) console.error(err)
                     else {
                         console.log('Send mail successfully')
                     }
                 })
-                setTimeout(() => {}, 600000)
             }
         } catch (error) {
-            next(error)            
+            console.error(error)            
         }
     }, 1000)
 })
