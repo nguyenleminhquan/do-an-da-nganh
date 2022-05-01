@@ -8,12 +8,17 @@ const userSchema = mongoose.Schema({
     myhome: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Home'
-    }
+    },
+    history: [{ type: String }]
 })
 
 userSchema.pre('save', function (next) {
-    this.password = bcrypt.hashSync(this.password, 10)
-    next()
+    if (!this.isModified('password')) {
+        next()
+    } else {
+        this.password = bcrypt.hashSync(this.password, 10)
+        next()
+    }
 })
 
 export default mongoose.model('User', userSchema)

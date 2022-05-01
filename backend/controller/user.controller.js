@@ -40,9 +40,9 @@ const loginUser = async (req, res, next) => {
                 username: exist.username,
                 fullname: exist.fullname,
                 home: exist.myhome,
+                history: exist.history,
                 token: token
             })
-            next()
         } else {
             return next(createError(400, "Password doesn't match"))
         }
@@ -51,7 +51,13 @@ const loginUser = async (req, res, next) => {
     }
 }
 
+const getHistory = async (req, res, next) => {
+    const user = await User.findOne({ username: req.username })
+    return res.json({ history: user.history })
+}
+
 export {
     loginUser,
-    registerUser
+    registerUser,
+    getHistory
 }
