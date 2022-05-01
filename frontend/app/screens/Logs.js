@@ -1,16 +1,23 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Picker, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import LogoutBtn from '../components/LogoutBtn';
 import LogTag from '../components/LogTag';
 import colors from '../misc/colors';
+import { getHistory } from '../redux/deviceRedux/deviceAction';
 
 
-const data = ['Doan.quan2 has turn on the led at 4/25/2022, 10:45:44 PM',
-  'Doan.quan2 has turn on the led at 4/26/2022, 10:45:44 PM',
-  'Doan.quan2 has turn off the led at 4/27/2022, 11:30:00 PM'];
+// const data = ['Doan.quan2 has turn on the led at 4/25/2022, 10:45:44 PM',
+//   'Doan.quan2 has turn on the led at 4/26/2022, 10:45:44 PM',
+//   'Doan.quan2 has turn off the led at 4/27/2022, 11:30:00 PM'];
+
+let data = []
+
 const Logs = () => {
-
+  const dispatch = useDispatch()
+  const history = useSelector(state => state.device.history)
+  console.log(history)
   const handleLogout = () => { }
   const [deviceName, setDeviceName] = useState('led');
   const [day, setDay] = useState(new Date());
@@ -26,6 +33,10 @@ const Logs = () => {
     let newHistory = data.filter(n => (n.search(dayText) !== -1) && (n.search(deviceName) !== -1));
     setHistories(newHistory);
   }
+
+  useEffect(() => {
+    dispatch(getHistory())
+  }, [])
   return (
     <>
       <StatusBar hidden />

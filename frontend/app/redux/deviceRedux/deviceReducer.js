@@ -3,6 +3,7 @@ import {
     SET_FAN_LEVEL,
     SET_LED_STATUS,
     SET_DOOR_STATUS,
+    SET_HISTORY,
 } from "./deviceType"
 
 const initState = {
@@ -23,6 +24,7 @@ const initState = {
             active: ''
         },
     ],
+    history: []
 }
 
 const deviceReducer = (state = initState, action) => {
@@ -70,6 +72,11 @@ const deviceReducer = (state = initState, action) => {
             return {
                 ...state,
                 devices: updatedDevices
+            }
+        case SET_HISTORY: 
+            return {
+                ...state, 
+                history: action.payload
             }
         default: 
             return state

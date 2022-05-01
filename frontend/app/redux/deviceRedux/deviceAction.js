@@ -4,11 +4,15 @@ import {
     SET_LED_STATUS,
     SET_DOOR_STATUS,
     SET_FAN_LEVEL,
+    SET_HISTORY,
 } from "./deviceType"
 
 const LED_URL = '/device/led'
 const FAN_URL = '/device/fan'
 const DOOR_URL = '/device/door'
+const HISTORY_URL = '/user/history'
+
+const user = AsyncStorage.getItem('user')
 
 export const getLedStatus = () => {
     return dispatch => {
@@ -51,7 +55,12 @@ export const getDoorStatus = () => {
 
 export const toggleLed = payload => {
     return dispatch => {
-        axios.post(LED_URL, payload)
+        axios({
+            method: 'POST',
+            data: payload,
+            url: LED_URL,
+            headers: { Authorization: `Bearer ${user.token}` },
+        })
             .then(response => {
                 dispatch(setLedStatus(payload.value))
                 AsyncStorage.setItem('Light', JSON.stringify(payload?.value))
@@ -63,7 +72,12 @@ export const toggleLed = payload => {
 
 export const toggleDoor = payload => {
     return dispatch => {
-        axios.post(DOOR_URL, payload)
+        axios({
+            method: 'POST',
+            data: payload,
+            url: DOOR_URL,
+            headers: { Authorization: `Bearer ${user.token}` }
+        })
             .then(response => {
                 dispatch(setDoorStatus(payload.value))
                 AsyncStorage.setItem('Door', JSON.stringify(payload?.value))
@@ -74,7 +88,12 @@ export const toggleDoor = payload => {
 
 export const adjustFanLevel = payload => {
     return dispatch => {
-        axios.post(FAN_URL, payload)
+        axios({
+            method: 'POST',
+            data: payload, 
+            url: FAN_URL,
+            headers: { Authorization: `Bearer ${user.token}` }
+        })
             .then(response => {
                 dispatch(setFanLevel(payload.value))
                 AsyncStorage.setItem('Fan', JSON.stringify(payload?.value))
@@ -101,5 +120,27 @@ export const setFanLevel = payload => {
     return {
         type: SET_FAN_LEVEL,
         payload
+    }
+}
+
+
+export const getHistory = () => {
+    return dispatch => {
+        axios({
+            method: 'GET',
+            url: HISTORY_URL,
+            headers: { Authorization: `Bearer ${user.token}`}
+        })
+            .then(response => {
+                dispatch(setHistory(response.data))
+            })
+            .catch(error => new Error(error.message))
+    }
+
+    function setHistory(payload) {
+        return {
+            type: SET_HISTORY,
+            payload,
+        }
     }
 }
