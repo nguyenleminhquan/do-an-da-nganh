@@ -1,26 +1,32 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../misc/colors';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../redux/authenRedux/authenActions';
 
 const Register = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation()
     const dispatch = useDispatch()
-    const [fullname, setFullname] = useState('');
+    const registerSuccess = useSelector(state => state.authen.registerSuccess)
+
+    const [fullname, setFullname] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [hide, setHide] = useState(true)
+    const [required, setRequired] = useState('')
     const updateSecureTextEntry = () => {
         setHide(!hide);
     }
     const signUpAction = () => {
-        const userInfo = { fullname, username, password }
-        dispatch(register(userInfo))
-        navigation.navigate('Main');
+        if (fullname !== '' && username !== '' && password !== '') {
+            const userInfo = { fullname, username, password }
+            dispatch(register(userInfo))
+        } else {
+            setRequired('Required')
+        }
     }
     const navToLogin = () => {
         navigation.navigate('Login');
@@ -28,6 +34,12 @@ const Register = () => {
     const dismissKeyboard = () =>{
         Keyboard.dismiss();
     }
+
+    useEffect(() => {
+        if (registerSuccess) { 
+            navigation.navigate('Login');
+        }
+    }, [registerSuccess])
 
     return (
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -42,6 +54,8 @@ const Register = () => {
                         placeholder='Enter your fullname'
                     />
                 </View>
+                <Text style={styles.errorMsg}>{fullname === '' && required}</Text>
+
                 <Text style={styles.labelText}>Username:</Text>
                 <View style={styles.inputbox}>
                     <FontAwesome name="user" size={24} color={colors.MAIN}/>
@@ -51,6 +65,8 @@ const Register = () => {
                         placeholder='Enter your username'
                     />
                 </View>
+                <Text style={styles.errorMsg}>{username === '' && required}</Text>
+
                 <Text style={styles.labelText}>Password:</Text>
                 <View style={styles.inputbox}>
                     <FontAwesome name="lock" size={24} color={colors.MAIN}/>
@@ -70,6 +86,8 @@ const Register = () => {
                         }
                     </TouchableOpacity>
                 </View>
+                <Text style={styles.errorMsg}>{password === '' && required}</Text>
+
                 <TouchableOpacity
                     style={styles.registerBtn}
                     onPress={signUpAction}
@@ -153,5 +171,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         marginTop: 20
+    },
+    errorMsg: {
+        color: 'red'
     }
 });
