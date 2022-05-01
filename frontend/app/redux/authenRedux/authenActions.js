@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from '../../api/axios'
-import { LOGIN_FAILURE, LOGIN_SUCCESS, REGISTER_FAILURE, REGISTER_SUCCESS } from "./authenType"
+import { LOGIN_FAILURE, LOGIN_SUCCESS, LOG_OUT, REGISTER_FAILURE, REGISTER_SUCCESS } from "./authenType"
 
 const LOGIN_URL = '/user/login'
 const REGISTER_URL = '/user/register'
@@ -10,8 +11,11 @@ export const login = payload => {
             .then(response => {
                 const user = response.data
 
-                localStorage.setItem('user', JSON.stringify(user))
+                AsyncStorage.setItem('user', JSON.stringify(user))
                 dispatch(loginSuccess(user))
+                // dispatch(getFanStatus())
+                // dispatch(getDoorStatus())
+                // dispatch(getLedStatus())
                 console.log('Login Successfully!!!')
             })
             .catch(error => {
@@ -31,6 +35,7 @@ export const register = payload => {
             .then(response => {
                 const users = response.data
                 dispatch(registerSuccess(users))
+                console.log('successful')
             })
             .catch(error => {
                 const errorMsg = error.msg
@@ -41,3 +46,11 @@ export const register = payload => {
     function registerFailure(payload) { return { type: REGISTER_FAILURE, payload } }
 }
 
+
+export const logout = () => {
+    const removeKey = ['user', 'Light', 'Door', 'Fan']
+    AsyncStorage.multiRemove(removeKey).then(() => true)
+    return {
+        type: LOG_OUT,
+    }
+}
