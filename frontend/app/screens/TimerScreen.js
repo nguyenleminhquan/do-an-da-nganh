@@ -1,7 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import CreateTimerModal from '../components/CreateTimerModal';
 import LogoutBtn from '../components/LogoutBtn';
 import colors from '../misc/colors';
@@ -72,6 +72,7 @@ const TimerScreen = (props) => {
                     timeOff ={new Date(item.timeOff)} 
                     device={item.deviceName}
                     id = {item.id}
+                    findTimers={findTimers}
                     />}
                     />
                 {/* </ScrollView> */}

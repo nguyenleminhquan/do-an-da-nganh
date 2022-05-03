@@ -22,10 +22,14 @@ const TimerTag = (props) => {
                 const newTimers = timers.filter(n=>n.id !== id);
                 console.log(`new timers:`,newTimers)
                 await AsyncStorage.setItem('timers', JSON.stringify(newTimers));
+                props.findTimers()
               } }
             ]
           );
     }
+    
+
+
     return (
         <Pressable style={styles.container} onLongPress={()=>handleLongPress(props.id)}>
             <View style={styles.devicecontainer}>
