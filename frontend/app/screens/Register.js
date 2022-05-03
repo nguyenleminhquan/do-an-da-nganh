@@ -3,15 +3,10 @@ import React, {useEffect, useState} from 'react';
 import colors from '../misc/colors';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '../redux/authenRedux/authenActions';
+import { register } from '../redux/authenRedux/authenAction';
 
-const Register = () => {
-    const navigation = useNavigation()
-    const dispatch = useDispatch()
-    const registerSuccess = useSelector(state => state.authen.registerSuccess)
-
+const Register = ({navigation}) => {
     const [fullname, setFullname] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -23,23 +18,23 @@ const Register = () => {
     const signUpAction = () => {
         if (fullname !== '' && username !== '' && password !== '') {
             const userInfo = { fullname, username, password }
-            dispatch(register(userInfo))
+
         } else {
             setRequired('Required')
         }
     }
     const navToLogin = () => {
-        navigation.navigate('Login');
+        navigation.navigate('Login')
     }
     const dismissKeyboard = () =>{
         Keyboard.dismiss();
     }
 
-    useEffect(() => {
-        if (registerSuccess) { 
-            navigation.navigate('Login');
-        }
-    }, [registerSuccess])
+    // useEffect(() => {
+    //     if (registerSuccess) { 
+    //         navigation.navigate('Login');
+    //     }
+    // }, [registerSuccess])
 
     return (
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>

@@ -1,146 +1,110 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from '../../api/axios'
-import { 
-    SET_LED_STATUS,
-    SET_DOOR_STATUS,
-    SET_FAN_LEVEL,
-    SET_HISTORY,
-} from "./deviceType"
+import { SET_DOOR_STATUS, SET_FAN_LEVEL, SET_LED_STATUS } from './deviceType'
 
-const LED_URL = '/device/led'
-const FAN_URL = '/device/fan'
-const DOOR_URL = '/device/door'
-const HISTORY_URL = '/user/history'
+const LED_API = '/device/led'
+const DOOR_API = '/device/door'
+const FAN_API = '/device/fan'
 
-const user = AsyncStorage.getItem('user')
-
-export const getLedStatus = () => {
-    return dispatch => {
-        axios.get(LED_URL)
-            .then(response => {
-                const ledStatus = response.data.value
-
-                AsyncStorage.setItem('Light', JSON.stringify(ledStatus))
-                dispatch(setLedStatus(ledStatus))
-            })
-            .catch(error => new Error(error.message))
+const asyncSetFunc = async (key, value) => {
+    try {
+        await AsyncStorage.setItem(key, JSON.stringify(value))
+    } catch (err) {
+        console.log(err)
     }
 }
 
-export const getFanStatus = () => {
+export const getLedStatus = () => {
     return dispatch => {
-        axios.get(FAN_URL)
-            .then(response => {
-                const fanLevel = response.data.value
+        axios.get(LED_API)
+            .then(res => {
+                const ledStatus = res.data.value
 
-                AsyncStorage.setItem('Fan', JSON.stringify(fanLevel))
-                dispatch(setFanLevel(fanLevel))
+                asyncSetFunc('Light', ledStatus)
+                dispatch(setLedStatus(ledStatus))
             })
-            .catch(error => new Error(error.message))
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 }
 
 export const getDoorStatus = () => {
     return dispatch => {
-        axios.get(DOOR_URL)
-            .then(response => {
-                const doorStatus = response.data.value
+        axios.get(DOOR_API)
+            .then(res => {
+                const doorStatus = res.data.value
 
-                AsyncStorage.setItem('Door', JSON.stringify(doorStatus))
+                asyncSetFunc('Door', doorStatus)
                 dispatch(setDoorStatus(doorStatus))
             })
-            .catch(error => new Error(error.message))
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 }
 
-export const toggleLed = payload => {
+export const getFanStatus = () => {
     return dispatch => {
-        axios({
-            method: 'POST',
-            data: payload,
-            url: LED_URL,
-            headers: { Authorization: `Bearer ${user.token}` },
-        })
-            .then(response => {
-                dispatch(setLedStatus(payload.value))
-                AsyncStorage.setItem('Light', JSON.stringify(payload?.value))
-            })
+        axios.get(FAN_API)
+            .then(res => {
+                const fanLevel = res.data.value
                 
-            .catch(error => new Error(error.message))
+                asyncSetFunc('Fan', fanLevel)
+                dispatch(setFanLevel(fanLevel))
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+        
+    }       
+}
+
+export const toggleLed = (payload, token) => {
+    return dispatch => {
+        axios.post(LED_API, payload, {
+            // headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(res => {
+                dispatch(setLedStatus(payload.value))
+                asyncSetFunc('Light', payload.value)
+            })
+            .catch(err => {
+                console.log(err.message)
+            }) 
     }
 }
 
-export const toggleDoor = payload => {
+export const toggleDoor = (payload, token) => {
     return dispatch => {
-        axios({
-            method: 'POST',
-            data: payload,
-            url: DOOR_URL,
-            headers: { Authorization: `Bearer ${user.token}` }
+        axios.post(DOOR_API, payload, {
+            // headers: { Authorization: `Bearer ${token}` }
         })
-            .then(response => {
+            .then(res => {
                 dispatch(setDoorStatus(payload.value))
-                AsyncStorage.setItem('Door', JSON.stringify(payload?.value))
+                asyncSetFunc('Door', payload.value)
             })
-            .catch(error => new Error(error.message))
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 }
 
-export const adjustFanLevel = payload => {
+export const adjustFanLevel = (payload, token) => {
     return dispatch => {
-        axios({
-            method: 'POST',
-            data: payload, 
-            url: FAN_URL,
-            headers: { Authorization: `Bearer ${user.token}` }
+        axios.post(FAN_API, payload, {
+            // headers: { Authorization: `Bearer ${token}` }
         })
-            .then(response => {
+            .then(res => {
                 dispatch(setFanLevel(payload.value))
-                AsyncStorage.setItem('Fan', JSON.stringify(payload?.value))
+                asyncSetFunc('Fan', payload.value)
             })
-            .catch(error => new Error(error.message))
-    }
-}
-
-export const setLedStatus = payload => {
-    return {
-        type: SET_LED_STATUS,
-        payload
-    }
-}
-
-export const setDoorStatus = payload => {
-    return {
-        type: SET_DOOR_STATUS,
-        payload
-    }
-}
-
-export const setFanLevel = payload => {
-    return {
-        type: SET_FAN_LEVEL,
-        payload
-    }
-}
-
-
-export const getHistory = () => {
-    return dispatch => {
-        axios({
-            method: 'GET',
-            url: HISTORY_URL,
-            headers: { Authorization: `Bearer ${user.token}`}
-        })
-            .then(response => {
-                dispatch(setHistory(response.data))
+            .catch(err => {
+                console.log(err.message)
             })
-            .catch(error => new Error(error.message))
-    }
-
-    function setHistory(payload) {
-        return {
-            type: SET_HISTORY,
-            payload,
-        }
     }
 }
+
+function setLedStatus(payload) { return { type: SET_LED_STATUS, payload } }
+function setDoorStatus(payload) { return { type: SET_DOOR_STATUS, payload } }
+function setFanLevel(payload) { return { type: SET_FAN_LEVEL, payload } }

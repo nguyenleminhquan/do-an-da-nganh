@@ -3,6 +3,7 @@ import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+
 import colors from '../misc/colors';
 import Home from './Home';
 import Logs from './Logs';
@@ -12,7 +13,7 @@ import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/devi
 
 const Tab = createBottomTabNavigator();
 
-function Main() {
+function Main({navigation}) {
   const dispatch = useDispatch()
   const [timers, setTimers] = useState([])
 
@@ -83,23 +84,23 @@ function Main() {
         tabBarInactiveBackgroundColor: colors.MAIN
       }}
     >
-      <Tab.Screen name="Home"
+      <Tab.Screen 
+        name="Home"
         component={Home}
         options={{
           tabBarIcon: ({ color }) => <Ionicons name="ios-home" size={24} color={color} />
         }}
       />
-      {/* <Tab.Screen name="TimerScreen" component={TimerScreen}
-        options={{
-          tabBarIcon: ({ color }) => <MaterialIcons name="timer" size={24} color={color} />
-        }}
-      /> */}
       <Tab.Screen
         name='TimerScreen'
         options={{
           tabBarIcon: ({ color }) => <MaterialIcons name="timer" size={24} color={color} />
         }}>
-        {() => <TimerScreen onScheduleTimer={handleAutoControlDevice} onClearTimer={handleClearTimer}/>}
+        {() => <TimerScreen 
+                  onScheduleTimer={handleAutoControlDevice} 
+                  onClearTimer={handleClearTimer} 
+                  navigation={navigation}
+              />}
       </Tab.Screen>
       <Tab.Screen name="Messages" component={Messages}
         options={{

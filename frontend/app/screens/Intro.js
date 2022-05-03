@@ -12,4 +12,4 @@ export default function Intro() {
       <Stack.Screen name="Register" component={Register} options={{headerShown:false}}/>
     </Stack.Navigator>
   )
-}createNativeStackNavigator
+}

@@ -95,6 +95,7 @@ const client = mqtt.connect(connectUrl, {
     connectTimeout: 4000,
     username: 'TSang2907',
     reconnectPeriod: 1000,
+    password: process.env.ADAFRUIT_KEY
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
@@ -132,50 +133,81 @@ client.on('message', (door, payload) => {
     console.log('Received Message:', door, payload.toString())
 })
 
-app.post('/device/led', verifyToken, async (req, res, next) => {
+// app.post('/device/led', verifyToken, async (req, res, next) => {
+//     const value = req.body.value
+//     client.publish(led, value, { qos: 0, retain: false }, (error) => {
+//         if (error) {
+//             return next(error)
+//         }
+//     })
+//     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
+//     const history = `${req.username} has turned ${value == '0' ? 'off' : 'on'} the led at ${date}`
+//     const user = await User.findOne({ username: req.username })
+//     user.history.push(history)
+//     await user.save()
+//     return res.json({ msg: "Successfully" })
+// })
+
+// app.post('/device/fan', verifyToken, async (req, res, next) => {
+//     const value = req.body.value
+//     client.publish(fan, value, { qos: 0, retain: false }, (error) => {
+//         if (error) {
+//             return next(error)
+//         }
+//     })
+//     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
+//     const history = `${req.username} has adjusted the fan speed to ${value} at ${date}`
+//     const user = await User.findOne({ username: req.username })
+//     user.history.push(history)
+//     await user.save()
+//     return res.json({ msg: "Succesfully" })
+// })
+
+// app.post('/device/door', verifyToken, async (req, res, next) => {
+//     const value = req.body.value
+//     client.publish(door, value, { qos: 0, retain: false }, (error) => {
+//         if (error) {
+//             return next(error)
+//         }
+//     })
+//     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
+//     const history = `${req.username} has ${value == '90' ? 'closed' : 'opened'} the door at ${date}`
+//     const user = await User.findOne({ username: req.username })
+//     user.history.push(history)
+//     await user.save()
+//     return res.json({ msg: "Succesfully" })
+// })
+
+app.post('/device/led', (req, res, next) => {
     const value = req.body.value
     client.publish(led, value, { qos: 0, retain: false }, (error) => {
         if (error) {
             return next(error)
         }
     })
-    const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
-    const history = `${req.username} has turned ${value == '0' ? 'off' : 'on'} the led at ${date}`
-    const user = await User.findOne({ username: req.username })
-    user.history.push(history)
-    await user.save()
     return res.json({ msg: "Successfully" })
 })
 
-app.post('/device/fan', verifyToken, async (req, res, next) => {
+app.post('/device/fan', (req, res, next) => {
     const value = req.body.value
     client.publish(fan, value, { qos: 0, retain: false }, (error) => {
         if (error) {
             return next(error)
         }
     })
-    const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
-    const history = `${req.username} has adjusted the fan speed to ${value} at ${date}`
-    const user = await User.findOne({ username: req.username })
-    user.history.push(history)
-    await user.save()
     return res.json({ msg: "Succesfully" })
 })
 
-app.post('/device/door', verifyToken, async (req, res, next) => {
+app.post('/device/door', (req, res, next) => {
     const value = req.body.value
     client.publish(door, value, { qos: 0, retain: false }, (error) => {
         if (error) {
             return next(error)
         }
     })
-    const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
-    const history = `${req.username} has ${value == '90' ? 'closed' : 'opened'} the door at ${date}`
-    const user = await User.findOne({ username: req.username })
-    user.history.push(history)
-    await user.save()
     return res.json({ msg: "Succesfully" })
 })
+
 
 app.use('/user', userRoutes)
 app.use('/device', deviceRoutes)

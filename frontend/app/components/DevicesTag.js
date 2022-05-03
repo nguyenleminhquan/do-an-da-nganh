@@ -1,8 +1,9 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+
 import colors from '../misc/colors';
 import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 import FanControllerModal from './FanControllerModal';
@@ -11,67 +12,94 @@ const DeviceTag = (props) => {
     const dispatch = useDispatch()
     const device = useSelector(state => state.device.devices.find(device => device.name === props.name))
 
-    const [status, setStatus] = useState('1')
-    const [showAdjustFanModal, setShowAdjustFanModal] = useState(false);
-
-    //goi api de lay gia tri gan cho fanvalue
+    const [status, setStatus] = useState('')
     const [fanValue, setFanValue] = useState(0)
+    const [showAdjustFanModal, setShowAdjustFanModal] = useState(false);
+    const [activeText, setActiveText] = useState('')
+    const [token, setToken] = useState('')
 
-    useLayoutEffect(() => {
-        const value = AsyncStorage.getItem('Fan')
-        value.then(res => setFanValue(JSON.parse(res)))
-    }, [])
-
-    useLayoutEffect(() => {
-        const value = AsyncStorage.getItem(device.name)
-        value.then(res => setStatus(JSON.parse(res)))
-    }, [])
-
-    const [btnName, setBtnName] = useState(() => {
-        if (device.name === 'Fan') return 'Adjust'
-        else if (device.name === 'Door') {
-            if (status === '90') return 'Open'
-            else return 'Close'
-        } else if (device.name === 'Light') {
-            if (status === '0') return 'On'
-            else return 'Off'
-        }
-    })      
+    const [btnName, setBtnName] = useState('')      
     
-    const handleDeviceClick = () => {
+    const handleDeviceClick = () => {   
         if (device.name === 'Door') {
-            console.log('payload is: ')
             if (status === '0') {
                 dispatch(toggleDoor({value: "90"}))
                 setStatus('90')
                 setBtnName('Open')
+                setActiveText('Closing...')
             } else {
                 dispatch(toggleDoor({value: "0"}))
                 setStatus('0')
                 setBtnName('Close')
+                setActiveText('Opening...')
             }
         } else if (device.name === 'Light') {
             if (status === '0') {
                 dispatch(toggleLed({value: "1"}))
                 setStatus('1')
                 setBtnName('Off')
+                setActiveText('On now...')
             } else {
                 dispatch(toggleLed({value: "0"}))
                 setStatus('0')
                 setBtnName('On')
+                setActiveText('Off now...')
             }
         }
-
     }
     const handleAdjustFan = (value) => {
-        //Post fan value
-        console.log(typeof value)
         dispatch(adjustFanLevel({value: value.toString()})) 
         setFanValue(value)
     }
-    const handleAdjustClick = ()=>{
+    const handleAdjustClick = () => {
         setShowAdjustFanModal(true);
     }
+
+    useEffect(() => {
+        const firstLoad = async () => {
+            try {
+                const value = await AsyncStorage.getItem(device.name)
+                if (device.name === 'Fan') {
+                    setBtnName('Adjust')
+                    setFanValue(JSON.parse(value))
+                } else {
+                    if (device.name === 'Light') {
+                        if (JSON.parse(value) === '0') {
+                            setBtnName('Turn On')
+                            setActiveText('Off now...')
+                        } else {
+                            setBtnName('Turn Off')
+                            setActiveText('On now...')
+                        }
+                    } else if (device.name === 'Door') {
+                        if (JSON.parse(value) === '0') {
+                            setBtnName('Close')
+                            setActiveText('Opening...')
+                        } else {
+                            setBtnName('Open')
+                            setActiveText('Closing...')
+                        }
+                    }   
+                    setStatus(JSON.parse(value))
+                }
+            } catch(err) {
+                console.log(err)
+            }
+        }
+        firstLoad()
+    }, [])
+    
+    useEffect(() => {
+        const firstLoad = async () => {
+            try {
+                const userToken = await AsyncStorage.getItem('userToken') 
+                if (userToken) setToken(userToken)
+            } catch(err) {
+                console.log(err)
+            }
+        }
+        firstLoad()
+    }, [])
 
     // Hien tai chi co 1 thiet bi o moi phong
     if (device.name === 'Light' || device.name === 'Door') return (
@@ -80,7 +108,7 @@ const DeviceTag = (props) => {
                 <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
                 <Text style={styles.deviceName}>{props.name}</Text>
             </View>
-            <Text style={styles.activeText}>Active {status}/1</Text>
+            <Text style={styles.activeText}>{activeText}</Text>
             <TouchableOpacity onPress={handleDeviceClick}>
                 <View style={styles.detailBtn}>
                     <Text style={styles.detailText}
@@ -95,7 +123,7 @@ const DeviceTag = (props) => {
                 <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
                 <Text style={styles.deviceName}>{props.name}</Text>
             </View>
-            <Text style={styles.activeText}>Rate {fanValue}/100</Text>
+            <Text style={styles.activeText}>Level: {fanValue}%</Text>
             <TouchableOpacity onPress={handleAdjustClick}>
                 <View style={styles.detailBtn}>
                     <Text style={styles.detailText}>{btnName}</Text>

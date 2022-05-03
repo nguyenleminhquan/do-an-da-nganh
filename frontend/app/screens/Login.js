@@ -1,18 +1,17 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import colors from '../misc/colors';
 import { FontAwesome, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import {login} from '../redux/authenRedux/authenActions'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import colors from '../misc/colors';
+import { login } from '../redux/authenRedux/authenAction';
 import { getDoorStatus, getFanStatus, getLedStatus } from '../redux/deviceRedux/deviceAction';
 
-const Login = () => {
+const Login = ({navigation}) => {
     const dispatch = useDispatch()
-    const navigation = useNavigation()
-    const loginSuccess = useSelector(state => state.authen.loginSuccess)
-    const errorMsg = useSelector(state => state.authen.errorMsg)
+    const authenState = useSelector(state => state.authen)
     const [required, setRequired] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,9 +23,6 @@ const Login = () => {
         if (email !== '' && password !== '') {
             const userInfo = {username: email, password}
             dispatch(login(userInfo))
-            dispatch(getDoorStatus())
-            dispatch(getFanStatus())
-            dispatch(getLedStatus())
         } else setRequired('Required')
     }
     const navToSignUp = () => {
@@ -37,16 +33,19 @@ const Login = () => {
     }
 
     useEffect(() => {
-        if (loginSuccess) {            
+        if (authenState.userToken !== '') {
             navigation.navigate('Main')
+            dispatch(getLedStatus())
+            dispatch(getDoorStatus())
+            dispatch(getFanStatus())
         }
-    }, [loginSuccess])
+    }, [authenState.userToken])
 
     return (
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <SafeAreaView style={styles.container}>
             <Text style={styles.nameText}>SMART HOME</Text>
-            <Text>{errorMsg && errorMsg}</Text>
+            <Text>{authenState.msg && authenState.msg}</Text>
             <Text style={styles.labelText}>Email:</Text>
             <View style={styles.inputbox}>
                 <FontAwesome name="user" size={24} color={colors.MAIN}/>

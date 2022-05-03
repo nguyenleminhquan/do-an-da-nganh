@@ -2,33 +2,43 @@ import { Entypo } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { logOut } from '../redux/authenRedux/authenAction';
 import CreateTimerModal from '../components/CreateTimerModal';
 import LogoutBtn from '../components/LogoutBtn';
 import colors from '../misc/colors';
 import TimerTag from '../components/TimerTag'
-import { useDispatch, useSelector } from 'react-redux';
-
-// const reverseData = data => {
-//     return data.sort((a, b) => {
-//         const aInt = new Date(a.timeOn);
-//         const bInt = new Date(b.timeOn);
-//         if (aInt > bInt) return 1;
-//         if (aInt == bInt) return 0;
-//         if (aInt < bInt) return -1;
-//     });
-// };
 
 const TimerScreen = (props) => {
     const dispatch = useDispatch()
-    const devices = useSelector(state => state.device.devices)
-    
     const [timers, setTimers] = useState([]);
     const [showCreateTimer, setShowCreateTimer] = useState(false);
-    //const { timers, setTimers, findTimers } = useTimers();
     const [startTimer, setStartTimer] = useState(false)
-    // const reverseTimers = reverseData(timers);
 
-    const handleLogout = () => { }
+    const handleLogout = () => {
+        // Alert.alert(
+        //   'Do you want to logout?',
+        //   'This will return to login screen.', [
+        //     {
+        //       text: 'Logout',
+        //       onPress: () => {
+        //         console.warn('Do not show Pressed!')
+        //         dipatch(logout())
+        //         navigation.navigate('Intro')
+        //       }
+        //     },
+        //     {
+        //       text: 'Cancel'
+        //     },
+        //   ],
+        //   {
+        //     cancelable: true
+        //   })
+        props.navigation.navigate('Login')
+        dispatch(logOut())
+    }
+
     const handleOnSave = async (deviceName, timeOn, timeOff) => {
         const timer = { id: Date.now(), deviceName, timeOn, timeOff };
         const updatedTimers = [...timers, timer];
