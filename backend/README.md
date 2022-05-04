@@ -9,4 +9,4 @@
 | http://localhost:5000/device/fan | GET | Authorization: Bearer user_token | | {<br>value: fan's value(0 - 100)<br>} | Get fan speed |
 | http://localhost:5000/device/led | POST | Authorization: Bearer user_token | {<br>value: string("0" or "1")<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to turn on/off the led |
 | http://localhost:5000/device/fan | POST | Authorization: Bearer user_token | {<br>value: string(0 - 100)<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to adjust fan speed  |
-| http://localhost:5000/device/door | POST | Authorization: Bearer user_token | {<br>value: string("0" for open or "90" for close<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to open/close the door |
+| http://localhost:5000/device/door | POST | Authorization: Bearer user_token | {<br>value: string("0" for opening the door or "90" for closing the door<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to open/close the door |

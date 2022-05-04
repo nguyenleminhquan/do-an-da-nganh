@@ -52,19 +52,18 @@ io.on('connection', socket => {
             const temp = await axios.get('https://io.adafruit.com/api/v2/TSang2907/feeds/cnpm-temp')
             const gas_data = gas.data.last_value
             const temp_data = temp.data.last_value
-
-            if (parseInt(gas_data) > 700) {
+    
+            if (parseInt(gas_data) > 300) {
                 const time = new Date()
                 socket.emit('warning_gas', time)
                 mailOption_gas.subject = 'Cảnh báo rò rỉ khí gas: ' + time
                 mailOption_gas.text = 'Có dấu hiệu bất thường về nồng độ khí gas cao vào lúc ' + time
                 transporter.sendMail(mailOption_gas, (err, success) => {
-                    if (err) throw err
+                    if (err) console.error(err)
                     else {
                         console.log('Send mail successfully')
                     }
                 })
-                setTimeout(() => {}, 600000)
             }
             if (parseFloat(temp_data) > 38) {
                 const time = new Date()
@@ -72,15 +71,14 @@ io.on('connection', socket => {
                 mailOption_temp.subject = 'Cảnh báo nhiệt độ cao: ' + time
                 mailOption_temp.text = 'Nhiệt độ đang cao vào lúc ' + time
                 transporter.sendMail(mailOption_temp, (err, success) => {
-                    if (err) throw err
+                    if (err) console.error(err)
                     else {
                         console.log('Send mail successfully')
                     }
                 })
-                setTimeout(() => {}, 600000)
             }
         } catch (error) {
-            next(error)            
+            console.error(error)            
         }
     }, 1000)
 })
@@ -95,6 +93,7 @@ const client = mqtt.connect(connectUrl, {
     connectTimeout: 4000,
     username: 'TSang2907',
     reconnectPeriod: 1000,
+    password: process.env.ADAFRUIT_KEY
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
@@ -142,6 +141,7 @@ app.post('/device/led', verifyToken, async (req, res, next) => {
     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
     const history = `${req.username} has turned ${value == '0' ? 'off' : 'on'} the led at ${date}`
     const user = await User.findOne({ username: req.username })
+    user.home.led = value
     user.history.push(history)
     await user.save()
     return res.json({ msg: "Successfully" })
@@ -157,6 +157,7 @@ app.post('/device/fan', verifyToken, async (req, res, next) => {
     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
     const history = `${req.username} has adjusted the fan speed to ${value} at ${date}`
     const user = await User.findOne({ username: req.username })
+    user.home.fan = value
     user.history.push(history)
     await user.save()
     return res.json({ msg: "Succesfully" })
@@ -172,6 +173,7 @@ app.post('/device/door', verifyToken, async (req, res, next) => {
     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
     const history = `${req.username} has ${value == '90' ? 'closed' : 'opened'} the door at ${date}`
     const user = await User.findOne({ username: req.username })
+    user.home.door = value
     user.history.push(history)
     await user.save()
     return res.json({ msg: "Succesfully" })

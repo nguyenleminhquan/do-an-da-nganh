@@ -5,9 +5,19 @@ const userSchema = mongoose.Schema({
     username: String,
     password: String,
     fullname: String,
-    myhome: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Home'
+    home: {
+        door: {
+            type: String,
+            default: "-1"
+        },
+        led: {
+            type: String,
+            default: "-1"
+        },
+        fan: {
+            type: String,
+            default: "-1"
+        }
     },
     history: [{ type: String }]
 })
