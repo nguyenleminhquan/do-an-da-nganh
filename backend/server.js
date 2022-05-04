@@ -93,6 +93,7 @@ const client = mqtt.connect(connectUrl, {
     connectTimeout: 4000,
     username: 'TSang2907',
     reconnectPeriod: 1000,
+    password: process.env.ADAFRUIT_KEY
 })
 const led = 'TSang2907/feeds/cnpm-led'
 const fan = 'TSang2907/feeds/cnpm-fan'
@@ -140,6 +141,7 @@ app.post('/device/led', verifyToken, async (req, res, next) => {
     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
     const history = `${req.username} has turned ${value == '0' ? 'off' : 'on'} the led at ${date}`
     const user = await User.findOne({ username: req.username })
+    user.home.led = value
     user.history.push(history)
     await user.save()
     return res.json({ msg: "Successfully" })
@@ -155,6 +157,7 @@ app.post('/device/fan', verifyToken, async (req, res, next) => {
     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
     const history = `${req.username} has adjusted the fan speed to ${value} at ${date}`
     const user = await User.findOne({ username: req.username })
+    user.home.fan = value
     user.history.push(history)
     await user.save()
     return res.json({ msg: "Succesfully" })
@@ -170,6 +173,7 @@ app.post('/device/door', verifyToken, async (req, res, next) => {
     const date = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })
     const history = `${req.username} has ${value == '90' ? 'closed' : 'opened'} the door at ${date}`
     const user = await User.findOne({ username: req.username })
+    user.home.door = value
     user.history.push(history)
     await user.save()
     return res.json({ msg: "Succesfully" })
