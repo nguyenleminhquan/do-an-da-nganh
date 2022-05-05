@@ -17,30 +17,30 @@ const DeviceTag = (props) => {
     const [showAdjustFanModal, setShowAdjustFanModal] = useState(false);
     const [activeText, setActiveText] = useState('')
     const [token, setToken] = useState('')
-
     const [btnName, setBtnName] = useState('')      
     
     const handleDeviceClick = () => {   
         if (device.name === 'Door') {
+            console.log(token)
             if (status === '0') {
-                dispatch(toggleDoor({value: "90"}))
+                dispatch(toggleDoor({value: "90"}, token))
                 setStatus('90')
                 setBtnName('Open')
                 setActiveText('Closing...')
             } else {
-                dispatch(toggleDoor({value: "0"}))
+                dispatch(toggleDoor({value: "0"}, token))
                 setStatus('0')
                 setBtnName('Close')
                 setActiveText('Opening...')
             }
         } else if (device.name === 'Light') {
             if (status === '0') {
-                dispatch(toggleLed({value: "1"}))
+                dispatch(toggleLed({value: "1"}, token))
                 setStatus('1')
                 setBtnName('Off')
                 setActiveText('On now...')
             } else {
-                dispatch(toggleLed({value: "0"}))
+                dispatch(toggleLed({value: "0"}, token))
                 setStatus('0')
                 setBtnName('On')
                 setActiveText('Off now...')
@@ -48,7 +48,7 @@ const DeviceTag = (props) => {
         }
     }
     const handleAdjustFan = (value) => {
-        dispatch(adjustFanLevel({value: value.toString()})) 
+        dispatch(adjustFanLevel({value: value.toString()}, token)) 
         setFanValue(value)
     }
     const handleAdjustClick = () => {

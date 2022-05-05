@@ -27,7 +27,6 @@ function Main({navigation}) {
     const deviceStatus = JSON.parse(value)
 
     // Case: time on != current?
-
     // Dispatch an action turn on for devices
     if (timer.deviceName === 'Light' && deviceStatus === '0') {
       dispatch(toggleLed({value: '1'}))

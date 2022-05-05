@@ -63,7 +63,7 @@ export const getFanStatus = () => {
 export const toggleLed = (payload, token) => {
     return dispatch => {
         axios.post(LED_API, payload, {
-            // headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
                 dispatch(setLedStatus(payload.value))
@@ -78,7 +78,7 @@ export const toggleLed = (payload, token) => {
 export const toggleDoor = (payload, token) => {
     return dispatch => {
         axios.post(DOOR_API, payload, {
-            // headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
                 dispatch(setDoorStatus(payload.value))
@@ -93,7 +93,7 @@ export const toggleDoor = (payload, token) => {
 export const adjustFanLevel = (payload, token) => {
     return dispatch => {
         axios.post(FAN_API, payload, {
-            // headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
                 dispatch(setFanLevel(payload.value))
