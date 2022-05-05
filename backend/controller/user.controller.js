@@ -39,7 +39,7 @@ const loginUser = async (req, res, next) => {
                 id: exist._id,
                 username: exist.username,
                 fullname: exist.fullname,
-                home: exist.myhome,
+                home: exist.home,
                 history: exist.history,
                 token: token
             })
