@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 import { Server } from 'socket.io'
 import axios from 'axios'
+import cors from 'cors'
 
 import connectDB from './config/db.js'
 import APINotFound from './middlewares/APINotFound.js'
@@ -17,6 +18,8 @@ connectDB()
 dotenv.config()
 const app = express()
 const port = 5000
+
+app.use(cors())
 
 const io = new Server(4000)
 let transporter = nodemailer.createTransport({
