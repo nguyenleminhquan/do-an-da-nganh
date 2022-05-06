@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +6,7 @@ import DevicesTag from '../components/DevicesTag';
 import LogoutBtn from '../components/LogoutBtn';
 import RoomBtn from '../components/RoomBtn';
 import colors from '../misc/colors';
-import { logout } from '../redux/authenRedux/authenActions';
+import { logOut } from '../redux/authenRedux/authenAction';
 
 const ROOM = [
   {
@@ -40,9 +39,8 @@ const Rooms = ({ name, chosen, onPress }) => {
   <RoomBtn chosen={chosen} name={name} chooseRoom={onPress} />
 }
 
-const Home = () => {
-  const dipatch = useDispatch()
-  const navigation = useNavigation()
+const Home = (props) => {
+  const dispatch = useDispatch()
   const [greet, setgreet] = useState('');
   const [iconGreet, setIconGreet] = useState('');
   const [greetColor, setGreetColor] = useState('');
@@ -67,9 +65,8 @@ const Home = () => {
     //   {
     //     cancelable: true
     //   })
-
-      dipatch(logout())
-      navigation.navigate('Login')
+    props.navigation.navigate('Login')
+    dispatch(logOut())
   }
 
   const findGreet = () => {
@@ -129,7 +126,6 @@ const Home = () => {
                   <DevicesTag
                     name={device.name}
                     iconName={device.iconName}
-                  // status={device.active}
                   />
                 </View>
               ))}

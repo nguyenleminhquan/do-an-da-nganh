@@ -34,9 +34,9 @@ const Logs = () => {
     setHistories(newHistory);
   }
 
-  useEffect(() => {
-    dispatch(getHistory())
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getHistory())
+  // }, [])
   return (
     <>
       <StatusBar hidden />

@@ -2,7 +2,6 @@ import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
-
 const LogoutBtn = (props) => {
   return (
     <TouchableOpacity style={styles.container}

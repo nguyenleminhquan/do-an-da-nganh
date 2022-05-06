@@ -1,12 +1,10 @@
-import { combineReducers } from "redux";
-import authenReducer from "./authenRedux/authenReducer";
-import deviceReducer from "./deviceRedux/deviceReducer"
-import roomReducer from "./roomRedux/roomReducer";
+import { combineReducers } from 'redux' 
+import authenReducer from './authenRedux/authenReducer'
+import deviceReducer from './deviceRedux/deviceReducer'
 
 const rootReducer = combineReducers({
-    authen: authenReducer, 
-    device: deviceReducer,
-    room: roomReducer
+    authen: authenReducer,
+    device: deviceReducer, 
 })
 
 export default rootReducer

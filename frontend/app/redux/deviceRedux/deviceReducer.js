@@ -1,10 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { 
-    SET_FAN_LEVEL,
-    SET_LED_STATUS,
-    SET_DOOR_STATUS,
-    SET_HISTORY,
-} from "./deviceType"
+import { SET_DOOR_STATUS, SET_FAN_LEVEL, SET_LED_STATUS } from "./deviceType"
 
 const initState = {
     devices: [
@@ -16,67 +10,54 @@ const initState = {
         {
             name: 'Door',
             iconName: 'door-open',
-            active: '', 
+            active: '',
         },
         {
             name: 'Light',
             iconName: 'lightbulb',
-            active: ''
-        },
-    ],
-    history: []
+            active: '',
+        }
+    ]
 }
 
 const deviceReducer = (state = initState, action) => {
     let updatedDevices
-    switch (action.type) {
+    switch(action.type) {
         case SET_LED_STATUS:
             updatedDevices = state.devices.map(device => {
-                if (device.name === 'Light') {
-                    console.log(action.payload)
-                    return {
-                        ...device,
-                        active: action.payload
-                    }
-                }
-                return device
+                if (device.name === 'Light') return {
+                    ...device,
+                    active: action.payload
+                } 
+                else return device
             })
             return {
-                ...state,
-                devices: updatedDevices
-            }
-        case SET_FAN_LEVEL:
-            updatedDevices = state.devices.map(device => {
-                if (device.name === 'Fan') {
-                    return {
-                        ...device,
-                        active: action.payload
-                    }
-                }
-                return device
-            })
-            return {
-                ...state,
+                ...state, 
                 devices: updatedDevices
             }
         case SET_DOOR_STATUS:
             updatedDevices = state.devices.map(device => {
-                if (device.name === 'Door') {
-                    return {
-                        ...device,
-                        active: action.payload
-                    }
+                if (device.name === 'Door') return {
+                    ...device,
+                    active: action.payload
                 }
-                return device
+                else return device
             })
             return {
-                ...state,
+                ...state, 
                 devices: updatedDevices
             }
-        case SET_HISTORY: 
+        case SET_FAN_LEVEL:
+            updatedDevices = state.devices.map(device => {
+                if (device.name === 'Fan') return {
+                    ...device,
+                    active: action.payload
+                }
+                else return device
+            })
             return {
                 ...state, 
-                history: action.payload
+                devices: updatedDevices
             }
         default: 
             return state

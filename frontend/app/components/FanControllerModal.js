@@ -1,6 +1,7 @@
 import Slider from '@react-native-community/slider';
 import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 const FanControllerModal = (props) => {
     // dung api lay gia tri hien tai cua quat de truyen vao value
     const [currentValue, setCurrentValue] = useState(props.value);
