@@ -1,28 +1,49 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Picker, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch } from 'react-redux';
+
 import LogoutBtn from '../components/LogoutBtn';
 import LogTag from '../components/LogTag';
 import colors from '../misc/colors';
-import { getHistory } from '../redux/deviceRedux/deviceAction';
-
+import { logOut } from '../redux/authenRedux/authenAction';
 
 // const data = ['Doan.quan2 has turn on the led at 4/25/2022, 10:45:44 PM',
 //   'Doan.quan2 has turn on the led at 4/26/2022, 10:45:44 PM',
 //   'Doan.quan2 has turn off the led at 4/27/2022, 11:30:00 PM'];
 
-let data = []
-
-const Logs = () => {
+const Logs = (props) => {
   const dispatch = useDispatch()
-  const history = useSelector(state => state.device.history)
-  console.log(history)
-  const handleLogout = () => { }
+  const state = useSelector(state => state.authen)
+  const [history, setHistory] = useState([])
   const [deviceName, setDeviceName] = useState('led');
   const [day, setDay] = useState(new Date());
   const [show, setShow] = useState(false);
   const [histories, setHistories] = useState([]);
+  
+  const handleLogout = () => { 
+    // Alert.alert(
+    //   'Do you want to logout?',
+    //   'This will return to login screen.', [
+    //     {
+    //       text: 'Logout',
+    //       onPress: () => {
+    //         console.warn('Do not show Pressed!')
+    //         dipatch(logout())
+    //         navigation.navigate('Intro')
+    //       }
+    //     },
+    //     {
+    //       text: 'Cancel'
+    //     },
+    //   ],
+    //   {
+    //     cancelable: true
+    //   })
+    props.navigation.navigate('Login')
+    dispatch(logOut())
+  }
 
   const changeDate = (event, selectedDate) => {
     setShow(!show);
@@ -30,20 +51,29 @@ const Logs = () => {
   }
   const searchAction = () => {
     let dayText = (day.getMonth() + 1).toString() + '/' + day.getDate() + '/' + day.getFullYear();
-    let newHistory = data.filter(n => (n.search(dayText) !== -1) && (n.search(deviceName) !== -1));
+    let newHistory = history.filter(n => (n.search(dayText) !== -1) && (n.search(deviceName) !== -1));
     setHistories(newHistory);
   }
 
-  // useEffect(() => {
-  //   dispatch(getHistory())
-  // }, [])
+  useEffect(() => {
+    const firstLoad = async () => {
+      try {
+        const userHistory = await AsyncStorage.getItem('userHistory') 
+        if (userHistory) setHistory(JSON.parse(userHistory))
+      } catch(err) {
+          console.log(err)
+      }
+    }
+    firstLoad()
+  }, [state.userHistory])
+
   return (
     <>
       <StatusBar hidden />
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerText}>LOGS</Text>
-          <LogoutBtn handleLogout={handleLogout} />
+          <LogoutBtn onPress={handleLogout} />
         </View>
         <View style={styles.filter}>
           <View style={styles.criterion}>
@@ -79,8 +109,10 @@ const Logs = () => {
           <Text style={styles.searchText}>Search</Text>
         </TouchableOpacity>
         <View style={styles.body}>
-          <FlatList data={histories}
+          <FlatList 
+            data={histories}
             renderItem={({ item }) => <LogTag content={item} />}
+            keyExtractor={(item, index) => index.toString()}
           />
 
         </View>

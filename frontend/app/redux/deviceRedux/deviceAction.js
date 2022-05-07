@@ -14,9 +14,11 @@ const asyncSetFunc = async (key, value) => {
     }
 }
 
-export const getLedStatus = () => {
+export const getLedStatus = (token) => {
     return dispatch => {
-        axios.get(LED_API)
+        axios.get(LED_API, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
             .then(res => {
                 const ledStatus = res.data.value
 
@@ -29,9 +31,11 @@ export const getLedStatus = () => {
     }
 }
 
-export const getDoorStatus = () => {
+export const getDoorStatus = (token) => {
     return dispatch => {
-        axios.get(DOOR_API)
+        axios.get(DOOR_API, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
             .then(res => {
                 const doorStatus = res.data.value
 
@@ -44,9 +48,11 @@ export const getDoorStatus = () => {
     }
 }
 
-export const getFanStatus = () => {
+export const getFanStatus = (token) => {
     return dispatch => {
-        axios.get(FAN_API)
+        axios.get(FAN_API, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
             .then(res => {
                 const fanLevel = res.data.value
                 

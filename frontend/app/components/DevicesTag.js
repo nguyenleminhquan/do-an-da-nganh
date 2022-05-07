@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { useDispatch, useSelector } from 'react-redux';
 
 import colors from '../misc/colors';
+import { getUserHistory } from '../redux/authenRedux/authenAction';
 import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 import FanControllerModal from './FanControllerModal';
 
@@ -46,6 +47,7 @@ const DeviceTag = (props) => {
                 setActiveText('Off now...')
             }
         }
+        dispatch(getUserHistory(token))
     }
     const handleAdjustFan = (value) => {
         dispatch(adjustFanLevel({value: value.toString()}, token)) 

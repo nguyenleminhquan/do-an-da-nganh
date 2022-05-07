@@ -1,9 +1,17 @@
-import { LOGIN_FAILURE, LOGIN_SUCCESS, LOG_OUT_SUCCESS, REGISTER_FAILURE, REGISTER_SUCCESS } from "./authenType"
+import { 
+    GET_USER_HISTORY, 
+    LOGIN_FAILURE, 
+    LOGIN_SUCCESS, 
+    LOG_OUT_SUCCESS, 
+    REGISTER_FAILURE, 
+    REGISTER_SUCCESS 
+} from "./authenType"
 
 const initState = {
-    isLoading: true,
+    isLoading: true,    
     userToken: '',
     msg: '',
+    userHistory: [],
 }
 
 const authenReducer = (state = initState, action) => {
@@ -35,6 +43,11 @@ const authenReducer = (state = initState, action) => {
                 isLoading: false,
                 userToken: '',
                 msg: '',
+            }
+        case GET_USER_HISTORY: 
+            return {
+                ...state, 
+                userHistory: action.payload
             }
         default: 
             return state

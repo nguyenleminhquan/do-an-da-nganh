@@ -35,9 +35,9 @@ const Login = ({navigation}) => {
     useEffect(() => {
         if (authenState.userToken !== '') {
             navigation.navigate('Main')
-            dispatch(getLedStatus())
-            dispatch(getDoorStatus())
-            dispatch(getFanStatus())
+            dispatch(getLedStatus(authenState.userToken))
+            dispatch(getDoorStatus(authenState.userToken))
+            dispatch(getFanStatus(authenState.userToken))
         }
     }, [authenState.userToken])
 

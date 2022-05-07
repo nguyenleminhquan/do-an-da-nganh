@@ -1,9 +1,17 @@
 import axios from '../../api/axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LOGIN_FAILURE, LOGIN_SUCCESS, LOG_OUT_SUCCESS, REGISTER_FAILURE, REGISTER_SUCCESS } from './authenType';
+import { 
+    LOGIN_FAILURE, 
+    LOGIN_SUCCESS, 
+    LOG_OUT_SUCCESS, 
+    REGISTER_FAILURE, 
+    REGISTER_SUCCESS,
+    GET_USER_HISTORY
+} from './authenType';
 
 const LOGIN_URL = '/user/login'
 const REGISTER_URL = '/user/register'
+const HISTORY_URL = '/user/history'
 
 const asynSetFunc = async (key, value) => {
     try {
@@ -26,8 +34,10 @@ export const login = userInfo => {
         axios.post(LOGIN_URL, userInfo)
             .then(res => {
                 const token = res.data.token
+                const history = res.data.history
 
                 asynSetFunc('userToken', token)
+                asynSetFunc('userHistory', JSON.stringify(history))
                 dispatch(loginSuccess(token))
                 console.log('Login Successfully!')
             })
@@ -89,11 +99,39 @@ export const register = userInfo => {
 export const logOut = () => {
     return dispatch => {
         asynRemoveFunc('userToken')
+        asynRemoveFunc('userHistory')
         dispatch(logOutSuccess())
     }
     function logOutSuccess() {
         return {
             type: LOG_OUT_SUCCESS
+        }
+    }
+}
+
+export const getUserHistory = (token) => {
+    return dispatch => {
+        axios.get(HISTORY_URL, {
+            headers: { Authorization: `Bearer ${token}` } 
+        })
+            .then(res => {
+                const history = res.data.history
+
+                console.log(history)
+                
+                asynSetFunc('userHistory', JSON.stringify(history))
+                dispatch(getHistory(history))
+                console.log('Get user history successfully!')
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+    }
+
+    function getHistory(payload) {
+        return {
+            type: GET_USER_HISTORY,
+            payload
         }
     }
 }
