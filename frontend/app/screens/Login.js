@@ -1,15 +1,14 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import { FontAwesome, Feather } from '@expo/vector-icons';
+import { Feather, FontAwesome } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import colors from '../misc/colors';
 import { login } from '../redux/authenRedux/authenAction';
 import { getDoorStatus, getFanStatus, getLedStatus } from '../redux/deviceRedux/deviceAction';
 
-const Login = ({navigation}) => {
+
+const Login = ({ navigation }) => {
     const dispatch = useDispatch()
     const authenState = useSelector(state => state.authen)
     const [required, setRequired] = useState('')
@@ -21,14 +20,14 @@ const Login = ({navigation}) => {
     }
     const loginAction = () => {
         if (email !== '' && password !== '') {
-            const userInfo = {username: email, password}
+            const userInfo = { username: email, password }
             dispatch(login(userInfo))
         } else setRequired('Required')
     }
     const navToSignUp = () => {
         navigation.navigate('Register')
     }
-    const dismissKeyboard = () =>{
+    const dismissKeyboard = () => {
         Keyboard.dismiss();
     }
 
@@ -47,37 +46,37 @@ const Login = ({navigation}) => {
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <SafeAreaView style={styles.container}>
             <Text style={styles.nameText}>SMART HOME</Text>
-            <Text>{authenState.msg && authenState.msg}</Text>
             <Text style={styles.labelText}>Email:</Text>
             <View style={styles.inputbox}>
-                <FontAwesome name="user" size={24} color={colors.MAIN}/>
+                <FontAwesome name="user" size={24} color={colors.MAIN} />
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text)=>{setEmail(text)}}
+                    onChangeText={(text) => { setEmail(text) }}
                     placeholder='Enter your email'
                 />
             </View>
             <Text style={styles.errorMsg}>{email === '' && required}</Text>
             <Text style={styles.labelText}>Password:</Text>
             <View style={styles.inputbox}>
-                <FontAwesome name="lock" size={24} color={colors.MAIN}/>
+                <FontAwesome name="lock" size={24} color={colors.MAIN} />
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text)=>{setPassword(text)}}
+                    onChangeText={(text) => { setPassword(text) }}
                     placeholder='Enter your password'
                     secureTextEntry={hide}
                 />
                 <TouchableOpacity style={styles.hideBtn}
                     onPress={updateSecureTextEntry}
-                    >
-                    {hide ? 
-                    <Feather name="eye-off" color="grey" size={20}/>
-                    :
-                    <Feather name="eye" color="grey" size={20}/>
-                }
+                >
+                    {hide ?
+                        <Feather name="eye-off" color="grey" size={20} />
+                        :
+                        <Feather name="eye" color="grey" size={20} />
+                    }
                 </TouchableOpacity>
             </View>
             <Text style={styles.errorMsg}>{password === '' && required}</Text>
+            <Text style={styles.errorMsg}>{authenState.msg && authenState.msg}</Text>
             <TouchableOpacity
                 style={styles.loginBtn}
                 onPress={loginAction}
@@ -96,13 +95,13 @@ const Login = ({navigation}) => {
 export default Login;
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         backgroundColor: colors.BLANK,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    inputbox:{
+    inputbox: {
         width: '80%',
         height: 30,
         borderColor: colors.MAIN,
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingLeft: 10
     },
-    input:{
+    input: {
         width: '85%',
         marginLeft: 5,
         borderLeftColor: colors.MAIN,
@@ -120,26 +119,26 @@ const styles = StyleSheet.create({
         height: '90%',
         marginTop: 1.5
     },
-    nameText:{
-        fontSize:40,
+    nameText: {
+        fontSize: 40,
         fontWeight: 'bold',
         color: colors.MAIN,
         marginBottom: 100
     },
-    labelText:{
+    labelText: {
         fontSize: 18,
         color: colors.MAIN,
         alignSelf: 'flex-start',
         marginLeft: '10%',
         marginBottom: 5
     },
-    hideBtn:{
+    hideBtn: {
         marginBottom: 3.5,
         marginRight: 5,
         width: 25,
         marginLeft: '10%'
     },
-    loginBtn:{
+    loginBtn: {
         width: '80%',
         height: 40,
         backgroundColor: colors.MAIN,
@@ -147,17 +146,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    btnText:{
+    btnText: {
         color: colors.BRIGHTTEXT,
         fontSize: 28,
         fontWeight: 'bold'
     },
-    registerText:{
+    registerText: {
         color: colors.MAIN,
         fontWeight: 'bold',
         fontSize: 20
     },
-    bottomText:{
+    bottomText: {
         fontWeight: 'bold',
         fontSize: 18,
         marginTop: 20
