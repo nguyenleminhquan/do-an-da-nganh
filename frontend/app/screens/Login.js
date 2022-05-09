@@ -34,6 +34,8 @@ const Login = ({navigation}) => {
 
     useEffect(() => {
         if (authenState.userToken !== '') {
+            setEmail('')
+            setPassword('')
             navigation.navigate('Main')
             dispatch(getLedStatus(authenState.userToken))
             dispatch(getDoorStatus(authenState.userToken))

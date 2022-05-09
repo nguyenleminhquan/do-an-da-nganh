@@ -7,14 +7,15 @@ import { useDispatch } from 'react-redux';
 import colors from '../misc/colors';
 import Home from './Home';
 import Logs from './Logs';
-import Messages from './Messages';
 import TimerScreen from './TimerScreen';
 import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
+import { getUserHistory } from '../redux/authenRedux/authenAction';
 
 const Tab = createBottomTabNavigator();
 
 function Main({navigation}) {
   const dispatch = useDispatch()
+  const [token, setToken] = useState('')
   const [timers, setTimers] = useState([])
 
   const findTimers = async () => {
@@ -23,42 +24,47 @@ function Main({navigation}) {
   }
 
   const handleAutoControlDevice = async (timer, timers, callback) => {
-    const value = await AsyncStorage.getItem(timer.deviceName)
-    const deviceStatus = JSON.parse(value)
+    try {
+      let deviceStatus
+      const value = await AsyncStorage.getItem(timer.deviceName)
+      if (value) deviceStatus = JSON.parse(value)
 
-    // Case: time on != current?
-    // Dispatch an action turn on for devices
-    if (timer.deviceName === 'Light' && deviceStatus === '0') {
-      dispatch(toggleLed({value: '1'}))
-    } else if (timer.deviceName === 'Door' && deviceStatus === '90') {
-      console.log('Turned on this door')
-      dispatch(toggleDoor({value: '0'})) 
-    } else if (timer.deviceName === 'Fan' && deviceStatus === '0') {
-      dispatch(adjustFanLevel({value: '100'}))
+      if (timer.deviceName === 'Light' && deviceStatus === '0') {
+        dispatch(toggleLed({value: '1'}, token))
+      } else if (timer.deviceName === 'Door' && deviceStatus === '90') {
+        console.log('Turned on this door')
+        dispatch(toggleDoor({value: '0'}, token)) 
+      } else if (timer.deviceName === 'Fan' && deviceStatus === '0') {
+        dispatch(adjustFanLevel({value: '100'}, token))
+      }
+      dispatch(getUserHistory(token))
+  
+      // After that time which had been set before => Turn off devices
+      const remainTime = new Date(timer.timeOff) - new Date(timer.timeOn)
+      const timeout = setTimeout(async () => {
+        console.log('Prepare for turning off device')
+        if (timer) {
+          if (timer.deviceName === 'Light') {
+            dispatch(toggleLed({value: '0'}, token))
+          } else if (timer.deviceName === 'Door') {
+            dispatch(toggleDoor({value: '90'}, token))
+          } else if (timer.deviceName === 'Fan') {
+            dispatch(adjustFanLevel({value: '0'}, token))
+          } 
+          
+          dispatch(getUserHistory(token))
+
+          const newTimers = timers.filter(n=>n.id !== timer.id);
+          console.log(`new timers:`,newTimers)
+          await AsyncStorage.setItem('timers', JSON.stringify(newTimers))
+          
+          callback(newTimers)
+        }
+      }, 20000)
+      // clearTimeout(timeout)
+    } catch(err) {
+      console.log(err)
     }
-
-    // After that time which had been set before => Turn off devices
-    const remainTime = new Date(timer.timeOff) - new Date(timer.timeOn)
-    setTimeout(() => {
-      console.log('Prepare for turning off device')
-      if (timer.deviceName === 'Light') {
-        dispatch(toggleLed({value: '0'}))
-      } else if (timer.deviceName === 'Door') {
-        dispatch(toggleDoor({value: '90'}))
-      } else if (timer.deviceName === 'Fan') {
-        dispatch(adjustFanLevel({value: '0'}))
-      } 
-      // const newTimers = handleClearTimer(timer, timers)
-
-      // const result = await AsyncStorage.getItem('timers');
-      const newTimers = timers.filter(n=>n.id !== timer.id);
-      console.log(`new timers:`,newTimers)
-      AsyncStorage.setItem('timers', JSON.stringify(newTimers))
-        .then(res => res);
-
-      callback(newTimers)
-    }, remainTime)
-    // Clear setTimeout()?
   }
 
   const handleClearTimer = async (timer, timers) => {
@@ -66,10 +72,24 @@ function Main({navigation}) {
     // setTimers(timers.splice(removeIdx))
     const newTimers = timers.filter(n=>n.id !== timer.id);
     console.log(`new timers:`,newTimers)
-    await AsyncStorage.setItem('timers', JSON.stringify(newTimers));
+    try {
+      await AsyncStorage.setItem('timers', JSON.stringify(newTimers));
+    } catch(err) {
+      console.log(err)
+    }
     return newTimers
   }
+
   useEffect(() => {
+    const firstLoad = async () => {
+      try {
+        const userToken = await AsyncStorage.getItem('userToken')
+        if (userToken) setToken(userToken)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    firstLoad()
     findTimers()
   }, [])
 
@@ -101,10 +121,10 @@ function Main({navigation}) {
                   navigation={navigation}
               />}
       </Tab.Screen>
-      <Tab.Screen name="Messages" component={Messages}
+      {/* <Tab.Screen name="Messages" component={Messages}
         options={{
           tabBarIcon: ({ color }) => <Ionicons name="notifications-sharp" size={24} color={color} />
-        }} />
+        }} /> */}
       <Tab.Screen name="Logs" component={Logs}
         options={{
           tabBarIcon: ({ color }) => <FontAwesome name="history" size={24} color={color} />
