@@ -18,6 +18,7 @@ connectDB()
 dotenv.config()
 const app = express()
 const port = 5000
+
 app.use(cors())
 
 const io = new Server(4000)
@@ -108,7 +109,6 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-
 
 client.on('connect', () => {
     console.log('Connect Adafruit successfully!')

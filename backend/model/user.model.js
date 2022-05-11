@@ -17,6 +17,18 @@ const userSchema = mongoose.Schema({
         fan: {
             type: String,
             default: "-1"
+        },
+        gas: {
+            type: String,
+            default: "-1"
+        },
+        temp: {
+            type: String,
+            default: "-1"
+        },
+        humi: {
+            type: String,
+            default: "-1"
         }
     },
     history: [{ type: String }]
