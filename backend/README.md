@@ -7,6 +7,9 @@
 | http://localhost:5000/device/led | GET | Authorization: Bearer user_token | | {<br>value: led's value("0" \| "1")<br>} | Get led's value |
 | http://localhost:5000/device/door | GET | Authorization: Bearer user_token | | {<br>value: door's value("0" \| "1")<br>} | Get door's value |
 | http://localhost:5000/device/fan | GET | Authorization: Bearer user_token | | {<br>value: fan's value(0 - 100)<br>} | Get fan speed |
+| http://localhost:5000/device/gas | GET | Authorization: Bearer user_token | | {<br>value: gas's value(0 - 100)<br>} | Get gas's value |
+| http://localhost:5000/device/temp | GET | Authorization: Bearer user_token | | {<br>value: temp's value(0 - 100)<br>} | Get temp's value |
+| http://localhost:5000/device/humi | GET | Authorization: Bearer user_token | | {<br>value: humi's value(0 - 100)<br>} | Get humi's value |
 | http://localhost:5000/device/led | POST | Authorization: Bearer user_token | {<br>value: string("0" or "1")<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to turn on/off the led |
 | http://localhost:5000/device/fan | POST | Authorization: Bearer user_token | {<br>value: string(0 - 100)<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to adjust fan speed  |
 | http://localhost:5000/device/door | POST | Authorization: Bearer user_token | {<br>value: string("0" for opening the door or "90" for closing the door<br>} | {<br>msg: "Succesfully"<br>} | Send data from client to open/close the door |
