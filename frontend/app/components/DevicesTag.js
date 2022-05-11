@@ -125,6 +125,21 @@ const DeviceTag = (props) => {
             </TouchableOpacity>
         </Pressable>
     );
+    else if (device.name === 'Temp' || device.name === 'Humi') return (
+        <Pressable style={styles.container}>
+            <View style={styles.logo}>
+                <FontAwesome5 name={props.iconName} size={24} color="#311A2E" />
+                <Text style={styles.deviceName}>{props.name}</Text>
+            </View>
+            <Text style={styles.activeText}>{activeText}</Text>
+            {/* <TouchableOpacity onPress={handleDeviceClick}>
+                <View style={styles.detailBtn}>
+                    <Text style={styles.detailText}
+                    >{btnName}</Text>
+                </View>
+            </TouchableOpacity> */}
+        </Pressable>
+    )
     else return (
         <Pressable style={styles.container}>
             <View style={styles.logo}>

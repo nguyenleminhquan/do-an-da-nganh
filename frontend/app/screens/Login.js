@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from '../misc/colors';
 import { login } from '../redux/authenRedux/authenAction';
-import { getDoorStatus, getFanStatus, getLedStatus } from '../redux/deviceRedux/deviceAction';
+import { getDoorStatus, getFanStatus, getHumiStatus, getLedStatus, getTempStatus } from '../redux/deviceRedux/deviceAction';
 
 
 const Login = ({ navigation }) => {
@@ -39,6 +39,8 @@ const Login = ({ navigation }) => {
             dispatch(getLedStatus(authenState.userToken))
             dispatch(getDoorStatus(authenState.userToken))
             dispatch(getFanStatus(authenState.userToken))
+            dispatch(getTempStatus(authenState.userToken))
+            dispatch(getHumiStatus(authenState.userToken))
         }
     }, [authenState.userToken])
 

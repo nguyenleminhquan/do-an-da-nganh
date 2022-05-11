@@ -1,10 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from '../../api/axios'
-import { SET_DOOR_STATUS, SET_FAN_LEVEL, SET_LED_STATUS } from './deviceType'
+import { SET_DOOR_STATUS, SET_FAN_LEVEL, SET_HUMI_STATUS, SET_LED_STATUS, SET_TEMP_STATUS } from './deviceType'
 
 const LED_API = '/device/led'
 const DOOR_API = '/device/door'
 const FAN_API = '/device/fan'
+const HUMI_API = '/device/humi'
+const TEMP_API = '/device/temp'
+
 
 const asyncSetFunc = async (key, value) => {
     try {
@@ -66,6 +69,43 @@ export const getFanStatus = (token) => {
     }       
 }
 
+export const getTempStatus = (token) => {
+    return dispatch => {
+        axios.get(TEMP_API, {
+            headers: { Authorization: `Bearer ${token}` }
+        }) 
+            .then(res => {
+                const tempValue = res.data.value
+
+                console.log(tempValue)
+
+                asyncSetFunc('Temp', tempValue)
+                dispatch(setTempStatus(tempValue))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+}
+
+
+export const getHumiStatus = (token) => {
+    return dispatch => {
+        axios.get(HUMI_API, {
+            headers: { Authorization: `Bearer ${token}` }
+        }) 
+            .then(res => {
+                const humiValue = res.data.value
+
+                asyncSetFunc('Humi', humiValue)
+                dispatch(setHumiStatus(humiValue))
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+}
+
 export const toggleLed = (payload, token) => {
     return dispatch => {
         axios.post(LED_API, payload, {
@@ -114,3 +154,5 @@ export const adjustFanLevel = (payload, token) => {
 function setLedStatus(payload) { return { type: SET_LED_STATUS, payload } }
 function setDoorStatus(payload) { return { type: SET_DOOR_STATUS, payload } }
 function setFanLevel(payload) { return { type: SET_FAN_LEVEL, payload } }
+function setTempStatus(payload) { return { type: SET_TEMP_STATUS, payload } }
+function setHumiStatus(payload) { return { type: SET_HUMI_STATUS, payload } }

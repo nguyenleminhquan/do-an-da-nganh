@@ -74,7 +74,7 @@ const Logs = (props) => {
       <StatusBar hidden />
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>LOGS</Text>
+          <Text style={styles.headerText}>Logs</Text>
           <LogoutBtn onPress={handleLogout} />
         </View>
         <View style={styles.filter}>

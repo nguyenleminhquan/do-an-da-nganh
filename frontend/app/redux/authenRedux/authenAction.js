@@ -117,8 +117,6 @@ export const getUserHistory = (token) => {
             .then(res => {
                 const history = res.data.history
 
-                console.log(history)
-                
                 asynSetFunc('userHistory', JSON.stringify(history))
                 dispatch(getHistory(history))
                 console.log('Get user history successfully!')

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -8,8 +8,10 @@ import colors from '../misc/colors';
 import Home from './Home';
 import Logs from './Logs';
 import TimerScreen from './TimerScreen';
+import Messages from './Sensor';
 import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/deviceAction';
 import { getUserHistory } from '../redux/authenRedux/authenAction';
+import Sensor from './Sensor';
 
 const Tab = createBottomTabNavigator();
 
@@ -119,6 +121,10 @@ function Main({navigation}) {
           tabBarIcon: ({ color }) => <Ionicons name="ios-home" size={24} color={color} />
         }}
       />
+      <Tab.Screen name="Sensors" component={Sensor}
+        options={{
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="motion-sensor" size={24} color={color} />
+        }} />
       <Tab.Screen
         name='Timer'
         options={{
@@ -130,10 +136,6 @@ function Main({navigation}) {
                   navigation={navigation}
               />}
       </Tab.Screen>
-      {/* <Tab.Screen name="Messages" component={Messages}
-        options={{
-          tabBarIcon: ({ color }) => <Ionicons name="notifications-sharp" size={24} color={color} />
-        }} /> */}
       <Tab.Screen name="Logs" component={Logs}
         options={{
           tabBarIcon: ({ color }) => <FontAwesome name="history" size={24} color={color} />
