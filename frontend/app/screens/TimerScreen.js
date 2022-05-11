@@ -17,28 +17,28 @@ const TimerScreen = (props) => {
     const [startTimer, setStartTimer] = useState(false)
 
     const handleLogout = () => {
-        Alert.alert(
-          'Do you want to logout?',
-          'This will return to login screen.', [
-            {
-              text: 'Logout',
-              onPress: () => {
-                console.warn('Do not show Pressed!')
-                dispatch(logOut())
-                props.navigation.navigate('Login')
-              }
-            },
-            {
-              text: 'Cancel'
-            },
-          ],
-          {
-            cancelable: true
-          })
+        // Alert.alert(
+        //   'Do you want to logout?',
+        //   'This will return to login screen.', [
+        //     {
+        //       text: 'Logout',
+        //       onPress: () => {
+        //         console.warn('Do not show Pressed!')
+        //         dispatch(logOut())
+        //         props.navigation.navigate('Login')
+        //       }
+        //     },
+        //     {
+        //       text: 'Cancel'
+        //     },
+        //   ],
+        //   {
+        //     cancelable: true
+        //   })
 
         // Test on web
-        // props.navigation.navigate('Login')
-        // dispatch(logOut())
+        props.navigation.navigate('Login')
+        dispatch(logOut())
     }
 
     const handleOnSave = async (deviceName, timeOn, timeOff) => {

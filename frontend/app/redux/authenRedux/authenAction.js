@@ -68,7 +68,7 @@ export const register = userInfo => {
     return dispatch => {
         axios.post(REGISTER_URL, userInfo) 
             .then(res => {
-                const msg = res.data
+                const msg = res.data.msg
 
                 dispatch(registerSuccess(msg))
                 console.log('Register Successfully!')

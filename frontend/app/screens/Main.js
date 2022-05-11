@@ -14,9 +14,12 @@ import { getUserHistory } from '../redux/authenRedux/authenAction';
 const Tab = createBottomTabNavigator();
 
 function Main({navigation}) {
+  // let curTime = new Date()
   const dispatch = useDispatch()
   const [token, setToken] = useState('')
   const [timers, setTimers] = useState([])
+
+  const [curTime, setCurTime] = useState(new Date())
 
   const findTimers = async () => {
     const result = await AsyncStorage.getItem('timers');
@@ -93,6 +96,12 @@ function Main({navigation}) {
     findTimers()
   }, [])
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setCurTime(new Date())
+  //   }, 1000)
+  // }, [curTime])
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -111,7 +120,7 @@ function Main({navigation}) {
         }}
       />
       <Tab.Screen
-        name='TimerScreen'
+        name='Timer'
         options={{
           tabBarIcon: ({ color }) => <MaterialIcons name="timer" size={24} color={color} />
         }}>

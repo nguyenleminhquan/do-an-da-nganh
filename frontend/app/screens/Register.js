@@ -6,7 +6,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../redux/authenRedux/authenAction';
 
-const Register = ({navigation}) => {
+const REGISTER_SUCCESS_MSG = 'Register successfully'
+
+const Register = (props) => {
+    const dispatch = useDispatch()
+    const authen = useSelector(state => state.authen)
     const [fullname, setFullname] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -17,24 +21,24 @@ const Register = ({navigation}) => {
     }
     const signUpAction = () => {
         if (fullname !== '' && username !== '' && password !== '') {
-            const userInfo = { fullname, username, password }
-
+            const userInfo = {username, password, fullname }
+            dispatch(register(userInfo))
         } else {
             setRequired('Required')
         }
     }
     const navToLogin = () => {
-        navigation.navigate('Login')
+        props.navigation.navigate('Login')
     }
     const dismissKeyboard = () =>{
         Keyboard.dismiss();
     }
 
-    // useEffect(() => {
-    //     if (registerSuccess) { 
-    //         navigation.navigate('Login');
-    //     }
-    // }, [registerSuccess])
+    useEffect(() => {
+        if (authen.msg === REGISTER_SUCCESS_MSG) { 
+            props.navigation.navigate('Main');
+        }
+    }, [authen.msg])
 
     return (
         // <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -82,7 +86,7 @@ const Register = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.errorMsg}>{password === '' && required}</Text>
-
+                <Text style={styles.errorMsg}>{authen.msg && authen.msg}</Text>
                 <TouchableOpacity
                     style={styles.registerBtn}
                     onPress={signUpAction}

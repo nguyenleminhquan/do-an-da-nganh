@@ -1,5 +1,5 @@
 import { Feather, FontAwesome } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
         Keyboard.dismiss();
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (authenState.userToken !== '') {
             setEmail('')
             setPassword('')

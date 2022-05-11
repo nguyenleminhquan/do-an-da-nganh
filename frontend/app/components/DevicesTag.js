@@ -1,7 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import colors from '../misc/colors';
@@ -10,6 +10,7 @@ import { adjustFanLevel, toggleDoor, toggleLed } from '../redux/deviceRedux/devi
 import FanControllerModal from './FanControllerModal';
 
 const DeviceTag = (props) => {
+    console.log('re-render')
     const dispatch = useDispatch()
     const device = useSelector(state => state.device.devices.find(device => device.name === props.name))
 
@@ -25,9 +26,9 @@ const DeviceTag = (props) => {
             console.log(token)
             if (status === '0') {
                 dispatch(toggleDoor({value: "90"}, token))
-                setStatus('90')
                 setBtnName('Open')
                 setActiveText('Closing...')
+                setStatus('90')
             } else {
                 dispatch(toggleDoor({value: "0"}, token))
                 setStatus('0')
@@ -47,10 +48,11 @@ const DeviceTag = (props) => {
                 setActiveText('Off now...')
             }
         }
-        dispatch(getUserHistory(token))
+        // dispatch(getUserHistory(token))
     }
     const handleAdjustFan = (value) => {
         dispatch(adjustFanLevel({value: value.toString()}, token)) 
+        // dispatch(getUserHistory(token))
         setFanValue(value)
     }
     const handleAdjustClick = () => {
@@ -102,6 +104,10 @@ const DeviceTag = (props) => {
         }
         firstLoad()
     }, [])
+
+    useEffect(() => {
+        dispatch(getUserHistory(token))
+    })
 
     // Hien tai chi co 1 thiet bi o moi phong
     if (device.name === 'Light' || device.name === 'Door') return (
